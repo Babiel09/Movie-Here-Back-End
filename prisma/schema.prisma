@@ -12,8 +12,8 @@ model User{
   name String
   email String @unique
   password String
-  photo String
-  description String
+  photo String @default("")
+  description String @default("")
   verified Boolean @default(false)
   createdAt DateTime @default(now())
   role Roles @default(User)
