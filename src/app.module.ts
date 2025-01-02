@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { PrismaModule } from 'prisma/prisma.module';
 import { USER_QUEUE } from './constants/constants';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
       name:USER_QUEUE
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
