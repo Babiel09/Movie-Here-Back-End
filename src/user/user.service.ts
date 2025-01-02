@@ -65,11 +65,11 @@ export class UserService{
     };
 
 
-    public async Login(data:{email:string}):Promise<User>{
+    public async Login(email:string):Promise<User>{
         try{
             const searchUserEmail = this.prisma.findUnique({
                 where:{
-                    email:data.email
+                    email:email
                 }
             });
 
