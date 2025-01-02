@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { PismaModule } from 'prisma/prisma.module';
 
 
 @Module({
-  imports: [],
+  imports: [PismaModule],
   controllers: [],
   providers: [],
 })
