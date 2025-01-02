@@ -2,11 +2,19 @@ import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { PrismaModule } from 'prisma/prisma.module';
+import { UserProcessor } from './processor/user.processor';
+import { BullModule } from '@nestjs/bull';
+import { USER_QUEUE } from 'src/constants/constants';
 
 @Module({
-    imports:[PrismaModule],
+    imports:[
+        PrismaModule,
+        BullModule.registerQueue({
+            name:USER_QUEUE
+        }),
+    ],
     controllers:[UserController],
-    providers:[UserService],
+    providers:[UserService,UserProcessor],
     exports:[UserService],
 })
 export class UserModule {};
