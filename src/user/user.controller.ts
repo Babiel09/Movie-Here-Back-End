@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Post, Res } from "@nestjs/common";
 import { UserService } from "./user.service";
 import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
@@ -33,6 +33,17 @@ export class UserController{
             return res.status(201).send(realNewUser);
             
         } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
+
+    @Get("/v1/:id")
+    private async getSpecifiedUser(@Param("id")id:number, @Res()res:Response):Promise<Response>{
+        try{
+            const specifiedUser = await this.userService.SelectOne(Number(id));
+            return  res.status(200).send(specifiedUser);
+        }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(500).json({server:`${err.message}`});
         };
