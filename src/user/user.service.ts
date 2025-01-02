@@ -49,4 +49,19 @@ export class UserService{
         };
     };
 
+    public async SelectOne(id:number):Promise<User>{
+        try{
+            const tryToFindUser = await this.prisma.findUnique({
+                where:{
+                    id:id,
+                },
+            });
+
+            return tryToFindUser;
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,500);
+        };
+    };
+
 };
