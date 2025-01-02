@@ -35,7 +35,18 @@ export class UserService{
         } catch(err){
             this.logger.error(`${err.message}`);
             throw new HttpException(`${err.message}`,500);
-        }
+        };
+    };
+
+    public async SelectAll():Promise<User[]>{
+        try{
+            const tryToGetAllUsers = await this.prisma.findMany();
+
+            return tryToGetAllUsers;
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,500);
+        };
     };
 
 };
