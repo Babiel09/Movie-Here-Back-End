@@ -2,11 +2,12 @@ import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
 import { Response } from "express";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 
 @Controller("auth")
 export class AuthController{
     private readonly logger = new Logger(AuthController.name);
-    constructor(private readonly userService:UserService){};
+    constructor(private readonly userService:UserService,private readonly jwtService:JwtService){};
 
     @Post("/v2/login")
     private async login(@Res()res:Response, @Body()data:{email:string,password:string}):Promise<Response>{
@@ -30,7 +31,9 @@ export class AuthController{
                 return res.status(401).json({server:`Invalid credentials!`});
             };
 
-            return res.status(202).send(findUserByEmail);
+            const token = this.jwtService.sign(findUserByEmail);
+
+            return res.status(202).send(token);
 
         } catch(err){
             this.logger.error(`${err.message}`);
