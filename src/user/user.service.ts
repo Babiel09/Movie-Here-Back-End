@@ -29,6 +29,9 @@ export class UserService{
             const tryToCreate = await this.prisma.create({
                 data:data
             });
+
+            return tryToCreate;
+
         } catch(err){
             this.logger.error(`${err.message}`);
             throw new HttpException(`${err.message}`,500);
