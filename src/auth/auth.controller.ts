@@ -24,7 +24,7 @@ export class AuthController{
 
             const findUserByEmail = await this.userService.Login(data.email);
 
-            const verifyPassword = await bcrypt.compare(data.email,findUserByEmail.password);
+            const verifyPassword = await bcrypt.compare(data.password,findUserByEmail.password);
 
             if(verifyPassword === false){
                 this.logger.error(`The password doesn't matc!`);
