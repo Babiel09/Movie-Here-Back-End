@@ -1,6 +1,7 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { PismaModule } from 'prisma/prisma.module';
+import { USER_QUEUE } from './constants/constants';
 
 
 @Module({
@@ -11,6 +12,9 @@ import { PismaModule } from 'prisma/prisma.module';
         host:process.env.REDIS_HOST,
         port:Number(process.env.REDIS_PORT),
       }
+    }),
+    BullModule.registerQueue({
+      name:USER_QUEUE
     }),
   ],
   controllers: [],
