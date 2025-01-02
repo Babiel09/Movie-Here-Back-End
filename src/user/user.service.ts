@@ -3,12 +3,18 @@ import { Prisma, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
+import { InjectQueue } from "@nestjs/bull";
+import { USER_QUEUE } from "src/constants/constants";
+import { Queue } from "bull";
 
 @Injectable()
 export class UserService{
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
     private readonly logger = new Logger(UserService.name);
-    constructor(private readonly pr:PrismaService){
+    constructor(
+        private readonly pr:PrismaService,
+        @InjectQueue(USER_QUEUE) private readonly job:Queue
+    ){
         this.prisma = pr.user;
     };
 
@@ -72,6 +78,13 @@ export class UserService{
                     email:email
                 }
             });
+
+            this.logger.debug("Adding the job in the Queue");
+            const loginJob = await this.job.add(USER_QUEUE,{
+                jobId:(await searchUserEmail).id,
+                jobName:`Login Job${(await searchUserEmail).id}`,
+            }); 
+            this.logger.debug(`New job: ${JSON.stringify(loginJob.data)}`);
 
             return searchUserEmail;
         }catch(err){
