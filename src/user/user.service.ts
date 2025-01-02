@@ -64,4 +64,19 @@ export class UserService{
         };
     };
 
+
+    public async Login(data:{email:string}):Promise<User>{
+        try{
+            const searchUserEmail = this.prisma.findUnique({
+                where:{
+                    email:data.email
+                }
+            });
+
+            return searchUserEmail;
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,500);
+        };
+    };
 };
