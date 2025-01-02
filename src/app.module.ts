@@ -1,13 +1,13 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { PismaModule } from 'prisma/prisma.module';
+import { PrismaModule } from 'prisma/prisma.module';
 import { USER_QUEUE } from './constants/constants';
 import { UserModule } from './user/user.module';
 
 
 @Module({
   imports: [
-    PismaModule,
+    PrismaModule,
     BullModule.forRoot({
       redis:{
         host:process.env.REDIS_HOST,
