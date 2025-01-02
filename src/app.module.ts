@@ -2,6 +2,7 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { PismaModule } from 'prisma/prisma.module';
 import { USER_QUEUE } from './constants/constants';
+import { UserModule } from './user/user.module';
 
 
 @Module({
@@ -16,6 +17,7 @@ import { USER_QUEUE } from './constants/constants';
     BullModule.registerQueue({
       name:USER_QUEUE
     }),
+    UserModule,
   ],
   controllers: [],
   providers: [],
