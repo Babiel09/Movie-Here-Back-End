@@ -5,6 +5,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { UserProcessor } from './processor/user.processor';
 import { BullModule } from '@nestjs/bull';
 import { USER_QUEUE } from 'src/constants/constants';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
     imports:[
@@ -12,6 +13,12 @@ import { USER_QUEUE } from 'src/constants/constants';
         BullModule.registerQueue({
             name:USER_QUEUE
         }),
+        JwtModule.register({
+              secret:process.env.JWT_SECRET,
+              signOptions:{
+                expiresIn:"30 days"
+              }
+            }),
     ],
     controllers:[UserController],
     providers:[UserService,UserProcessor],
