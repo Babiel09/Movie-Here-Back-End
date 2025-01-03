@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthGuard } from './guards/auth.guard';
 import { BullModule } from '@nestjs/bull';
 import { AUTH_QUEUE } from 'src/constants/constants';
+import { AuthProcessor } from './processor/auth.processor';
 
 @Module({
     imports: [
@@ -28,6 +29,6 @@ import { AUTH_QUEUE } from 'src/constants/constants';
         }),
     ],
     controllers: [AuthController],
-    providers:[GoogleGuard,AuthGuard],
+    providers:[GoogleGuard,AuthGuard,AuthProcessor],
 })
 export class AuthModule { };
