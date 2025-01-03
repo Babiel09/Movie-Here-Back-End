@@ -21,10 +21,8 @@ import { AuthGuard } from './guards/auth.guard';
             load:[authGoogleConfig]
         }),
         PassportModule.register({ defaultStrategy: 'google' }),
-        AuthGuard,
-        GoogleGuard
     ],
     controllers: [AuthController],
-    providers:[GoogleGuard],
+    providers:[GoogleGuard,AuthGuard],
 })
 export class AuthModule { };
