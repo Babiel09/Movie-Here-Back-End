@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import authGoogleConfig from './config/auth.google.config';
 import { PassportModule } from '@nestjs/passport';
 import { AuthGuard } from './guards/auth.guard';
+import { BullModule } from '@nestjs/bull';
+import { AUTH_QUEUE } from 'src/constants/constants';
 
 @Module({
     imports: [
@@ -21,6 +23,9 @@ import { AuthGuard } from './guards/auth.guard';
             load:[authGoogleConfig]
         }),
         PassportModule.register({ defaultStrategy: 'google' }),
+        BullModule.registerQueue({
+            name:AUTH_QUEUE,
+        }),
     ],
     controllers: [AuthController],
     providers:[GoogleGuard,AuthGuard],
