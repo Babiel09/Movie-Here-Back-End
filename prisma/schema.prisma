@@ -19,11 +19,6 @@ model User{
   role Roles @default(User)
 }
 
-model Movies{
-  id Int @id @default(autoincrement())
-  name String
-
-}
 
 enum Roles {
   User
