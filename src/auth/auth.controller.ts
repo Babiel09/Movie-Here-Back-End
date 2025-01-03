@@ -4,11 +4,17 @@ import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "./guards/auth.guard";
+import { InjectQueue } from "@nestjs/bull";
+import { AUTH_QUEUE } from "src/constants/constants";
+import { Queue } from "bull";
 
 @Controller("auth")
 export class AuthController{
     private readonly logger = new Logger(AuthController.name);
-    constructor(private readonly userService:UserService,private readonly jwtService:JwtService){};
+    constructor(
+        private readonly userService:UserService,private readonly jwtService:JwtService,
+        @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue,
+    ){};
 
     @Post("/v2/login")
     private async login(@Res()res:Response, @Body()data:{email:string,password:string}):Promise<Response>{
@@ -48,6 +54,15 @@ export class AuthController{
     private async decodeToken(@Res()res:Response,@Body("token")token:string):Promise<Response>{
         try{
             const decodifiedTOken = await this.jwtService.decode(token);
+
+            this.logger.debug(`Working in a new auth job!`);
+            const job = await this.authQueue.add(AUTH_QUEUE,{
+                jobId:decodifiedTOken.id,
+                jobName:`Decode token${decodifiedTOken.id}`
+            });
+
+            this.logger.debug(`New auth job: ${JSON.stringify(job.data)}`);
+
             return res.status(202).send(decodifiedTOken);
         }catch(err){
             this.logger.error(`${err.message}`);
