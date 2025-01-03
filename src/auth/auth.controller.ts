@@ -4,6 +4,7 @@ import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { GoogleGuard } from "./guards/google.guard";
+import { AuthGuard } from "./guards/auth.guard";
 
 @Controller("auth")
 export class AuthController{
@@ -42,7 +43,9 @@ export class AuthController{
         };
     };
 
+
     @Post("/v3/decode")
+    @UseGuards(AuthGuard)
     private async decodeToken(@Res()res:Response,@Body("token")token:string):Promise<Response>{
         try{
             const decodifiedTOken = await this.jwtService.decode(token);
