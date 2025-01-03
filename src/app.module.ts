@@ -15,9 +15,6 @@ import { AuthModule } from './auth/auth.module';
         port:Number(process.env.REDIS_PORT),
       }
     }),
-    BullModule.registerQueue({
-      name:USER_QUEUE
-    }),
     UserModule,
     AuthModule,
   ],
