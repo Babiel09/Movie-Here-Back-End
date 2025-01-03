@@ -3,7 +3,6 @@ import { Response } from "express";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { GoogleGuard } from "./guards/google.guard";
 import { AuthGuard } from "./guards/auth.guard";
 
 @Controller("auth")
