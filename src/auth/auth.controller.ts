@@ -1,8 +1,9 @@
-import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Post, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { GoogleGuard } from "./guards/auth.guards";
 
 @Controller("auth")
 export class AuthController{
@@ -40,4 +41,17 @@ export class AuthController{
             return res.status(500).json({server:`${err.message}`});
         };
     };
+
+    @Post("/v3/decode")
+    private async decodeToken(@Res()res:Response,@Body("token")token:string):Promise<Response>{
+        try{
+            const decodifiedTOken = await this.jwtService.decode(token);
+            return res.status(202).send(decodifiedTOken);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
+
+  
 };
