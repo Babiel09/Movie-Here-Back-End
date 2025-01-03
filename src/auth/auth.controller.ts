@@ -51,7 +51,7 @@ export class AuthController{
 
     @Post("/v3/decode")
     @UseGuards(AuthGuard)
-    private async decodeToken(@Res()res:Response,@Body("token")token:string):Promise<Response>{
+    public async decodeToken(@Body("token")token:string,@Res()res?:Response):Promise<Response>{
         try{
             const decodifiedTOken = await this.jwtService.decode(token);
 
