@@ -29,6 +29,6 @@ import { AuthProcessor } from './processor/auth.processor';
         }),
     ],
     controllers: [AuthController],
-    providers:[GoogleGuard,AuthGuard,AuthProcessor],
+    providers:[GoogleGuard,AuthGuard,AuthProcessor,AuthController],
 })
 export class AuthModule { };
