@@ -2,6 +2,11 @@ import { Module } from '@nestjs/common';
 import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { GoogleGuard } from './guards/google.guard';
+import { ConfigModule } from '@nestjs/config';
+import authGoogleConfig from './config/auth.google.config';
+import { PassportModule } from '@nestjs/passport';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
     imports: [
@@ -12,7 +17,14 @@ import { JwtModule } from '@nestjs/jwt';
                 expiresIn: "30 days"
             }
         }),
+        ConfigModule.forRoot({
+            load:[authGoogleConfig]
+        }),
+        PassportModule.register({ defaultStrategy: 'google' }),
+        AuthGuard,
+        GoogleGuard
     ],
     controllers: [AuthController],
+    providers:[GoogleGuard],
 })
 export class AuthModule { };
