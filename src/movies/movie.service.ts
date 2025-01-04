@@ -118,6 +118,24 @@ export class MovieService{
         })),
       );
 
-      return data
+      return data;
+    };
+
+    public async getActorImage(id:number):Promise<Axios[]>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any[]>(`https://api.themoviedb.org/3/person/${id}/images`,{
+          headers:{
+            accept:"application/json",
+            Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
+          },
+        })
+        .pipe(
+          catchError((error:AxiosError)=>{
+            this.logger.error(`${error}`);
+            throw new HttpException(`${error}`,500);
+          })
+        ),
+      );
+      return data;
     };
 };
