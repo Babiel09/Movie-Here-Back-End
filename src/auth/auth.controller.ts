@@ -61,7 +61,7 @@ export class AuthController{
                 jobName:`Decode token${decodifiedTOken.id}`
             });
 
-            this.logger.debug(`New auth job: ${JSON.stringify(job.data)}`);
+            this.logger.debug(`Processed job: ${JSON.stringify(job.data)}`);
 
             return res.status(202).send(decodifiedTOken);
         }catch(err){

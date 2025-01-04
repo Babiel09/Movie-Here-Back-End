@@ -84,7 +84,7 @@ export class UserService{
                 jobId:(await searchUserEmail).id,
                 jobName:`Login Job${(await searchUserEmail).id}`,
             }); 
-            this.logger.debug(`New job: ${JSON.stringify(loginJob.data)}`);
+            this.logger.debug(`Processed job: ${JSON.stringify(loginJob.data)}`);
 
             return searchUserEmail;
         }catch(err){

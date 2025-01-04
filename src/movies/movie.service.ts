@@ -1,12 +1,17 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable } from "@nestjs/common";
+import { InjectQueue } from "@nestjs/bull";
+import { Injectable, Logger } from "@nestjs/common";
 import { AxiosError } from "axios";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
+import { MOVIE_QUEUE } from "src/constants/constants";
 
 @Injectable()
 export class MovieService{
-    
-    constructor(private readonly httpService:HttpService){};
+    private readonly logger = new Logger(MovieService.name);
+    constructor(
+      private readonly httpService:HttpService,
+      @InjectQueue(MOVIE_QUEUE) private readonly movieQueue,
+    ){};
     
     public async movieAPITest(){
         const headers = {
@@ -38,7 +43,14 @@ export class MovieService{
                 }),
               ),
           );
-      
+
+          this.logger.debug(`Working in a new job in the Movie Queue`);
+          const jobMovies = await this.movieQueue.add(MOVIE_QUEUE,{
+            jobName:`Movies Job`,
+          });
+          
+          this.logger.debug(`Processed job: ${JSON.stringify(jobMovies.data)}`);
+
           return data;
     };
 };
