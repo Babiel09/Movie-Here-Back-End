@@ -13,7 +13,7 @@ export class UserService{
     private readonly logger = new Logger(UserService.name);
     constructor(
         private readonly pr:PrismaService,
-        @InjectQueue(USER_QUEUE) private readonly job:Queue
+        @InjectQueue(USER_QUEUE) private readonly userQueue:Queue
     ){
         this.prisma = pr.user;
     };
@@ -80,7 +80,7 @@ export class UserService{
             });
 
             this.logger.debug("Adding the job in the Queue");
-            const loginJob = await this.job.add(USER_QUEUE,{
+            const loginJob = await this.userQueue.add(USER_QUEUE,{
                 jobId:(await searchUserEmail).id,
                 jobName:`Login Job${(await searchUserEmail).id}`,
             }); 
