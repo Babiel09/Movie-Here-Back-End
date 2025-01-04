@@ -1,6 +1,6 @@
 import { HttpService } from "@nestjs/axios";
 import { InjectQueue } from "@nestjs/bull";
-import { Injectable, Logger } from "@nestjs/common";
+import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { AxiosError } from "axios";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
@@ -41,8 +41,8 @@ export class MovieService{
               })
               .pipe(
                 catchError((error: AxiosError) => {
-                  console.log(error);
-                  throw 'An error happened!';
+                  this.logger.error(`${error}`);
+                  throw new HttpException(`${error}`,500);
                 }),
               ),
           );
@@ -59,5 +59,23 @@ export class MovieService{
 
     public changePage(newPage:number){
       this.page = newPage;
+    };
+
+    public async getMovieForId(id:number){
+     const {data}  = await firstValueFrom(
+      this.httpService.get<any>(`https://api.themoviedb.org/3/movie/${id}?language=en-US`,{
+          headers:{
+            accept: 'application/json',
+            Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+          },
+      })
+      .pipe(
+        catchError((error: AxiosError) => {
+          this.logger.error(`${error}`);
+          throw new HttpException(`${error}`,500);
+        }),
+      ),
+     );
+     return data
     };
 };
