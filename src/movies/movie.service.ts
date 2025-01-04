@@ -79,5 +79,21 @@ export class MovieService{
      return data
     };
 
-    public async
+    public async getCompanyLogos(id:number):Promise<Axios>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any>(`https://api.themoviedb.org/3/company/${id}/images`,{
+          headers:{
+            accept: 'application/json',
+            Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+          },
+        })
+        .pipe(
+          catchError((error:AxiosError)=>{
+          this.logger.error(`${error}`);
+          throw new HttpException(`${error}`,500);
+        })),
+      );
+
+      return data;
+    };
 };
