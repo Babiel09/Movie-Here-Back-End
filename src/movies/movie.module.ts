@@ -4,6 +4,7 @@ import { MovieController } from "./movie.controller";
 import { MovieService } from "./movie.service";
 import { BullModule } from "@nestjs/bull";
 import { MOVIE_QUEUE } from "src/constants/constants";
+import { MovieProcessor } from "./processor/movies.processor";
 
 @Module({
     imports:[
@@ -13,6 +14,6 @@ import { MOVIE_QUEUE } from "src/constants/constants";
         }),
     ],
     controllers:[MovieController],
-    providers:[MovieService]
+    providers:[MovieService,MovieProcessor]
 })
 export class MovieModule{};
