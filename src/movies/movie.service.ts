@@ -121,7 +121,7 @@ export class MovieService{
       return data;
     };
 
-    public async getActorImage(id:number):Promise<Axios[]>{
+    public async getActorImages(id:number):Promise<Axios[]>{
       const {data} = await firstValueFrom(
         this.httpService.get<any[]>(`https://api.themoviedb.org/3/person/${id}/images`,{
           headers:{
