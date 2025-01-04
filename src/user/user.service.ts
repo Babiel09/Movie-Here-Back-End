@@ -79,7 +79,7 @@ export class UserService{
                 }
             });
 
-            this.logger.debug("Adding the job in the Queue");
+            this.logger.debug("Working in a new job in the User Queue");
             const loginJob = await this.userQueue.add(USER_QUEUE,{
                 jobId:(await searchUserEmail).id,
                 jobName:`Login Job${(await searchUserEmail).id}`,

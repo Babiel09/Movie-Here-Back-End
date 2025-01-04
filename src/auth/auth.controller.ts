@@ -55,7 +55,7 @@ export class AuthController{
         try{
             const decodifiedTOken = await this.jwtService.decode(token);
 
-            this.logger.debug(`Working in a new auth job!`);
+            this.logger.debug(`Working in a new Auth Queu!`);
             const job = await this.authQueue.add(AUTH_QUEUE,{
                 jobId:decodifiedTOken.id,
                 jobName:`Decode token${decodifiedTOken.id}`
