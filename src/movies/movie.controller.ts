@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Logger, Post, Res, UseGuards } from "@nestjs/common";
 import { MovieService } from "./movie.service";
 import { Response } from "express";
 
@@ -8,10 +8,21 @@ export class MovieController{
     constructor(private readonly movieService:MovieService){};
 
     @Get("/v1/test")
-    private async testAPI(@Res()res:Response) {
+    private async testAPI(@Res()res:Response):Promise<Response>{
         try{
             const resultTest = await this.movieService.movieAPITest();
             return res.status(200).send(resultTest.data);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
+
+    @Get("/v1/films")
+    private async getAllMoivesSice1900(@Res()res:Response):Promise<Response>{
+        try{
+            const allMovies = await this.movieService.getAllMovies();
+            return res.status(200).send(allMovies);
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(500).json({server:`${err.message}`});
