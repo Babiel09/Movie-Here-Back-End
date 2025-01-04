@@ -102,4 +102,22 @@ export class MovieService{
 
       return data;
     };
+
+
+    public async searchForUser(fullName:string):Promise<Axios[]>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any[]>(`https://api.themoviedb.org/3/search/person?query=${fullName}&include_adult=true&language=en-US&page=1`,{
+          headers:{
+            accept:"application/json",
+            Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
+          },
+        })
+        .pipe(catchError((error:AxiosError)=>{
+          this.logger.error(`${error}`);
+          throw new HttpException(`${error}`,500);
+        })),
+      );
+
+      return data
+    };
 };
