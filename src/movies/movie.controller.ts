@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Post, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Logger, Param, Post, Put, Res, UseGuards } from "@nestjs/common";
 import { MovieService } from "./movie.service";
 import { Response } from "express";
 
@@ -23,6 +23,24 @@ export class MovieController{
         try{
             const allMovies = await this.movieService.getAllMovies();
             return res.status(200).send(allMovies);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
+
+    @Put("/v1/changePage/:page")
+    private async changeTheDefaultPage(@Param("page")page:number,@Res()res:Response):Promise<Response>{
+        try{
+            if(!page){
+                this.logger.error("Please insert a valid page!");
+                return res.status(400).json("Please insert a valid page!");
+            };
+
+            this.movieService.changePage(Number(page));
+
+            return res.status(200).json({server:`New page sett: ${page}`});
+
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(500).json({server:`${err.message}`});
