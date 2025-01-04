@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Param, Post, Put, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Logger, Param, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
 import { MovieService } from "./movie.service";
 import { Response } from "express";
 
@@ -64,6 +64,24 @@ export class MovieController{
         try{
             const companyImage = await this.movieService.getCompanyLogos(Number(id));
             return res.status(200).send(companyImage);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
+
+    @Get("/v1/actor")
+    private async findUserByFullName(@Query("fullName")fullName:string,@Query("number")page:number,@Res()res:Response):Promise<Response>{
+        try{
+            if(!fullName){
+                this.logger.error(`Insert the full name to do a search!`);
+                return res.status(400).json({server:"Insert the full name to do a search!"});
+            };
+
+            const actorFinded = await this.movieService.searchForActor(fullName,page);
+
+            return res.status(200).send(actorFinded); 
+
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(500).json({server:`${err.message}`});
