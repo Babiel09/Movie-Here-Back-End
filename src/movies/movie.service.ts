@@ -96,8 +96,7 @@ export class MovieService{
 
       this.logger.debug("Working in a new job in the Movie Queue");
       const companyImageJob = await this.movieQueue.add(MOVIE_QUEUE,{
-        jobId:id,
-        jobName:`Company image${id}`
+        jobId:id
       });
       this.logger.debug(`Processed job: ${JSON.stringify(companyImageJob.data)}`);
 
