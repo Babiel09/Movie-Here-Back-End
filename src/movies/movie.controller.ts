@@ -87,4 +87,17 @@ export class MovieController{
             return res.status(500).json({server:`${err.message}`});
         };
     };
+
+    @Get("/v1/actor/photos/:id")
+    private async findUserPhotos(@Param("id")id:number,@Res()res:Response):Promise<Response>{
+        try{
+            const userPhotos = await this.movieService.getActorImages(id);
+
+            return res.status(200).send(userPhotos);
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
 };
