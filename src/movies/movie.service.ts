@@ -7,11 +7,14 @@ import { MOVIE_QUEUE } from "src/constants/constants";
 
 @Injectable()
 export class MovieService{
+    private page:number;
     private readonly logger = new Logger(MovieService.name);
     constructor(
       private readonly httpService:HttpService,
-      @InjectQueue(MOVIE_QUEUE) private readonly movieQueue,
-    ){};
+      @InjectQueue(MOVIE_QUEUE) private readonly movieQueue
+    ){
+      this.page = 1;
+    };
     
     public async movieAPITest(){
         const headers = {
@@ -29,7 +32,7 @@ export class MovieService{
 
         const { data } = await firstValueFrom(
             this.httpService
-              .get<any[]>('https://api.themoviedb.org/3/movie/changes?page=1', {
+              .get<any[]>(`https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=true&language=en-US&page=${this.page}&sort_by=popularity.desc`, {
                 headers: {
                   accept: 'application/json',
                   Authorization:
@@ -52,5 +55,9 @@ export class MovieService{
           this.logger.debug(`Processed job: ${JSON.stringify(jobMovies.data)}`);
 
           return data;
+    };
+
+    public changePage(newPage:number){
+      this.page = newPage;
     };
 };
