@@ -93,13 +93,15 @@ export class UserService{
         };
     };
 
-    public async Update(id:number,data:any):Promise<User>{
+    public async UpdateDescription(id:number,description:string):Promise<User>{
         try{
             const tryToUpdate = await this.prisma.update({
                 where:{
                     id:id
                 },
-                data:data
+                data:{
+                    description:description
+                }
             });
 
             return tryToUpdate;
