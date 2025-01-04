@@ -92,4 +92,20 @@ export class UserService{
             throw new HttpException(`${err.message}`,500);
         };
     };
+
+    public async Update(id:number,data:any):Promise<User>{
+        try{
+            const tryToUpdate = await this.prisma.update({
+                where:{
+                    id:id
+                },
+                data:data
+            });
+
+            return tryToUpdate;
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,500);
+        };
+    };
 };
