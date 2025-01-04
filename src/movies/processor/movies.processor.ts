@@ -14,6 +14,7 @@ export class MovieProcessor{
 
     @Process("company_images")
     private async workerCompanyImg(job:Job){
-       const a = await this.movieService.getCompanyLogos(job.data);
+      await this.movieService.getCompanyLogos(job.data);
     };
+
 };
