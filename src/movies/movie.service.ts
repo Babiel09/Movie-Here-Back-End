@@ -76,6 +76,13 @@ export class MovieService{
         }),
       ),
      );
+
+     this.logger.debug("Working in a new job in the Movie Queue");
+     const specifiedMovieJob = await this.movieQueue.add(MOVIE_QUEUE,{
+       jobId:id
+     });
+     this.logger.debug(`Processed job: ${JSON.stringify(specifiedMovieJob.data)}`);
+
      return data
     };
 
