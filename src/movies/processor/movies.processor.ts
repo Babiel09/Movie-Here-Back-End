@@ -16,5 +16,15 @@ export class MovieProcessor{
     private async workerCompanyImg(job:Job){
       await this.movieService.getCompanyLogos(job.data);
     };
+    
+    @Process("search_actor")
+    private async workerFindActor(job:Job){
+        await this.movieService.searchForActor(job.data.name,job.data.page);
+    };
 
+    @Process("actor_images")
+    private async workerActorImage(job:Job){
+        await this.movieService.getActorImages(job.data);
+    };
+    
 };
