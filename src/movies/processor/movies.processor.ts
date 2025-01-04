@@ -1,4 +1,4 @@
-import { Process, Processor } from "@nestjs/bull";
+import { JOB_REF, Process, Processor } from "@nestjs/bull";
 import { MOVIE_QUEUE } from "src/constants/constants";
 import { MovieService } from "../movie.service";
 import { Job } from "bull";
@@ -10,5 +10,10 @@ export class MovieProcessor{
     @Process("all_movies")
     private async workerAllMovies(){
         await this.movieService.getAllMovies();
+    };
+
+    @Process("company_images")
+    private async workerCompanyImg(job:Job){
+       const a = await this.movieService.getCompanyLogos(job.data);
     };
 };
