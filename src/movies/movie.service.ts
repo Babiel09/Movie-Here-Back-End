@@ -1,7 +1,7 @@
 import { HttpService } from "@nestjs/axios";
 import { InjectQueue } from "@nestjs/bull";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { AxiosError } from "axios";
+import { Axios, AxiosError } from "axios";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
 
@@ -28,7 +28,7 @@ export class MovieService{
         );
     };
 
-    public async getAllMovies(){
+    public async getAllMovies():Promise<Axios[]>{
 
         const { data } = await firstValueFrom(
             this.httpService
@@ -61,7 +61,7 @@ export class MovieService{
       this.page = newPage;
     };
 
-    public async getMovieForId(id:number){
+    public async getMovieForId(id:number):Promise<Axios>{
      const {data}  = await firstValueFrom(
       this.httpService.get<any>(`https://api.themoviedb.org/3/movie/${id}?language=en-US`,{
           headers:{
@@ -78,4 +78,6 @@ export class MovieService{
      );
      return data
     };
+
+    public async
 };
