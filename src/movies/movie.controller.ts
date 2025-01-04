@@ -46,4 +46,16 @@ export class MovieController{
             return res.status(500).json({server:`${err.message}`});
         };
     };
+
+    @Get("/v1/findMovie/:id")
+    private async findSpecifiedMovie(@Res()res:Response,@Param("id")id:number):Promise<Response>{
+        try{
+            const specifiedMovie = await this.movieService.getMovieForId(Number(id));
+
+            return res.status(200).send(specifiedMovie);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
 };
