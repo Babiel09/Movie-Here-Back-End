@@ -118,6 +118,15 @@ export class MovieService{
         })),
       );
 
+      
+      this.logger.debug("Working in a new job in the Movie Queue");
+      const ActorJob = await this.movieQueue.add(MOVIE_QUEUE,{
+        jobName:fullName,
+        jobPage:page,
+      });
+      this.logger.debug(`Processed job: ${JSON.stringify(ActorJob.data)}`);
+
+
       return data;
     };
 
@@ -136,6 +145,13 @@ export class MovieService{
           })
         ),
       );
+
+      this.logger.debug("Working in a new job in the Movie Queue");
+      const ActorImageJob = await this.movieQueue.add(MOVIE_QUEUE,{
+        jobId:id,
+      });
+      this.logger.debug(`Processed job: ${JSON.stringify(ActorImageJob.data)}`);
+
       return data;
     };
 };
