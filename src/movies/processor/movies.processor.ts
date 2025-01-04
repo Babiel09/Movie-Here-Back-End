@@ -26,5 +26,10 @@ export class MovieProcessor{
     private async workerActorImage(job:Job){
         await this.movieService.getActorImages(job.data);
     };
+
+    @Process("get_specified_movie")
+    private async workerGetSpecifiedMovie(job:Job){
+        await this.movieService.getMovieForId(job.data)
+    };
     
 };
