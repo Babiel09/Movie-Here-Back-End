@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Patch, Post, Res } from "@nestjs/common";
 import { UserService } from "./user.service";
 import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
@@ -43,6 +43,24 @@ export class UserController{
         try{
             const specifiedUser = await this.userService.SelectOne(Number(id));
             return  res.status(200).send(specifiedUser);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(500).json({server:`${err.message}`});
+        };
+    };
+
+    @Patch("/v2/description/:id")
+    private async changeUserDescription(@Res()res:Response,@Body("description")description:string,@Param("id")id:number):Promise<Response>{
+        try{
+
+            if(!description){
+                this.logger.error(`You need to input a description!`);
+            };
+
+            const newDescription = await this.userService.UpdateDescription(Number(id),description);
+
+            return res.status(202).send(newDescription);
+
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(500).json({server:`${err.message}`});
