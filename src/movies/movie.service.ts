@@ -104,9 +104,9 @@ export class MovieService{
     };
 
 
-    public async searchForUser(fullName:string):Promise<Axios[]>{
+    public async searchForActor(fullName:string,page:number):Promise<Axios[]>{
       const {data} = await firstValueFrom(
-        this.httpService.get<any[]>(`https://api.themoviedb.org/3/search/person?query=${fullName}&include_adult=true&language=en-US&page=1`,{
+        this.httpService.get<any[]>(`https://api.themoviedb.org/3/search/person?query=${fullName}&include_adult=true&language=en-US&page=${page}`,{
           headers:{
             accept:"application/json",
             Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
