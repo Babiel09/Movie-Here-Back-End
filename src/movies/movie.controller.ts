@@ -14,7 +14,7 @@ export class MovieController{
             return res.status(200).send(resultTest.data);
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -25,7 +25,7 @@ export class MovieController{
             return res.status(200).send(allMovies);
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -43,7 +43,7 @@ export class MovieController{
 
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -55,7 +55,7 @@ export class MovieController{
             return res.status(200).send(specifiedMovie);
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -66,7 +66,7 @@ export class MovieController{
             return res.status(200).send(companyImage);
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -84,7 +84,7 @@ export class MovieController{
 
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -97,7 +97,7 @@ export class MovieController{
 
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 };

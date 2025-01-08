@@ -34,7 +34,7 @@ export class UserController{
             
         } catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -45,7 +45,7 @@ export class UserController{
             return  res.status(200).send(specifiedUser);
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -63,7 +63,7 @@ export class UserController{
 
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 };

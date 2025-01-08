@@ -44,7 +44,7 @@ export class AuthController{
 
         } catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
@@ -66,7 +66,7 @@ export class AuthController{
             return res.status(202).send(decodifiedTOken);
         }catch(err){
             this.logger.error(`${err.message}`);
-            return res.status(500).json({server:`${err.message}`});
+            return res.status(err.status).json({server:`${err.message}`});
         };
     };
 
