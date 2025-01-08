@@ -18,5 +18,6 @@ import { SendEmail } from "./DTO/email.dto";
     ],
     controllers:[EmailController],
     providers:[EmailService,SendEmail],
+    exports:[EmailService,SendEmail]
 })
 export class EmailModule{};
