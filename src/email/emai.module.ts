@@ -3,6 +3,8 @@ import { EmailController } from "./email.controller";
 import { EmailService } from "./email.service";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { SendEmail } from "./DTO/email.dto";
+import { BullModule } from "@nestjs/bull";
+import { EMAIL_QUEUE } from "src/constants/constants";
 
 @Module({
     imports:[
@@ -14,6 +16,9 @@ import { SendEmail } from "./DTO/email.dto";
                 pass:process.env.GMAIL_PASS,
               }
             }
+          }),
+          BullModule.registerQueue({
+            name:EMAIL_QUEUE
           }),
     ],
     controllers:[EmailController],
