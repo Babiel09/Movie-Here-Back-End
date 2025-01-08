@@ -111,8 +111,30 @@ export class UserService{
         };
     };
 
-    public async ChangeUserRole(role:Roles,id:number):Promise<User>{
+    public async ChangeUserRole(newRole:Roles,id:number):Promise<User>{
         try{
+
+            const findUser = await this.prisma.findUnique({
+                where:{
+                    id:id
+                }
+            });
+
+            if(!findUser){
+                this.logger.error(`We can't find the user with this id:${findUser.id}`);
+                throw new HttpException(`We can't find the user with this id:${findUser.id}`,400);
+            };
+
+            const tryToChangeTheRole = await this.prisma.update({
+                where:{
+                    id:Number(findUser.id),
+                },
+                data:{
+                    role:newRole,
+                },
+            });
+
+            return tryToChangeTheRole; 
 
         }catch(err){
             this.logger.error(`${err.message}`);
