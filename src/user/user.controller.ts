@@ -6,11 +6,13 @@ import { Response } from "express";
 import { PrismaService } from "prisma/prisma.service";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { SendEmail } from "src/email/DTO/email.dto";
+import { EmailService } from "src/email/email.service";
 @Controller("user")
 export class UserController{
     private readonly logger = new Logger(UserController.name);
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
-    constructor(private readonly userService:UserService, private readonly pr:PrismaService){
+    constructor(private readonly userService:UserService, private readonly pr:PrismaService,private readonly emailService:EmailService){
         this.prisma = pr.user;
     };
 
@@ -33,6 +35,44 @@ export class UserController{
             return res.status(201).send(realNewUser);
             
         } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+    @Patch("/v2/verify/:id")
+    private async verifyUser(@Param("id")id:number,@Body()data:SendEmail,@Res()res:Response):Promise<Response>{
+        try{
+            const userToVerifyEmail = await this.prisma.findUnique({
+                where:{
+                    id:Number(id),
+                },
+            });
+
+            let verifyTrue = userToVerifyEmail.verified = true;
+
+            const userVerified = await this.prisma.update({
+                where:{
+                    id:Number(id),
+                },
+                data:{
+                    verified:verifyTrue,
+                },
+            });
+
+            this.logger.debug(`${userVerified.verified}`);
+
+            if(data.to !== userVerified.email){
+                this.logger.error(`The data recipient is not the same of the user with this id:${userVerified.id}`);
+            };
+
+            const email = await this.emailService.sendEmail(data);
+
+            this.logger.log(`Email sucefully send and the user is now verified!`);
+
+            return res.status(202).send(userVerified);            
+
+        }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
         };
