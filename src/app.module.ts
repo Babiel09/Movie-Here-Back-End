@@ -5,12 +5,14 @@ import { USER_QUEUE } from './constants/constants';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MovieModule } from './movies/movie.module';
+import { EmailModule } from './email/emai.module';
 
 
 @Module({
   imports: [
-    PrismaModule,
     MovieModule,
+    PrismaModule,
+    EmailModule,
     BullModule.forRoot({
       redis:{
         host:process.env.REDIS_HOST,
