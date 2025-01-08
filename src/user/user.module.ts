@@ -6,6 +6,7 @@ import { UserProcessor } from './processor/user.processor';
 import { BullModule } from '@nestjs/bull';
 import { USER_QUEUE } from 'src/constants/constants';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailModule } from 'src/email/emai.module';
 
 @Module({
     imports:[
@@ -13,6 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
         BullModule.registerQueue({
             name:USER_QUEUE
         }),
+        EmailModule,
         JwtModule.register({
               secret:process.env.JWT_SECRET,
               signOptions:{
