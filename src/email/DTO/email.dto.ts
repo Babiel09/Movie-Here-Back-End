@@ -12,6 +12,6 @@ export class SendEmail{
     @IsString({message:"The text needs to be a string!"})
     text:string;
     @IsString({message:"The html needs to input like a string"})
-    html:HTMLBodyElement
+    html:string | Buffer<ArrayBufferLike>
 
 };
