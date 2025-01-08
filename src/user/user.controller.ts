@@ -1,13 +1,14 @@
-import { Body, Controller, Get, Logger, Param, Patch, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Patch, Post, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
 import { Response } from "express";
 import { PrismaService } from "prisma/prisma.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, Roles } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { SendEmail } from "src/email/DTO/email.dto";
 import { EmailService } from "src/email/email.service";
+import { UserGuard } from "./guards/user.guard";
 @Controller("user")
 export class UserController{
     private readonly logger = new Logger(UserController.name);
@@ -77,6 +78,23 @@ export class UserController{
             return res.status(err.status).json({server:`${err.message}`});
         };
     };
+
+    @Patch("/v3/role/:id")
+    @UseGuards(UserGuard)
+    private async changeUserRole(@Body("role")role:Roles,@Param("id")id:number,@Res()res:Response):Promise<Response>{
+        try{
+
+            const changeUserRole = await this.userService.ChangeUserRole(role,Number(id));
+
+            this.logger.debug(`New Role: ${changeUserRole.role}`);
+            return res.status(200).send(changeUserRole);
+
+        } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
 
     @Get("/v1/:id")
     private async getSpecifiedUser(@Param("id")id:number, @Res()res:Response):Promise<Response>{
