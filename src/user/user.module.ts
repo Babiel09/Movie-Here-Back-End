@@ -7,6 +7,7 @@ import { BullModule } from '@nestjs/bull';
 import { USER_QUEUE } from 'src/constants/constants';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from 'src/email/emai.module';
+import { UserGuard } from './guards/user.guard';
 
 @Module({
     imports:[
@@ -23,7 +24,7 @@ import { EmailModule } from 'src/email/emai.module';
             }),
     ],
     controllers:[UserController],
-    providers:[UserService,UserProcessor],
+    providers:[UserService,UserProcessor,UserGuard],
     exports:[UserService],
 })
 export class UserModule {};
