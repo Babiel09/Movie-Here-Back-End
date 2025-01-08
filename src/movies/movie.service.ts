@@ -42,7 +42,7 @@ export class MovieService{
               .pipe(
                 catchError((error: AxiosError) => {
                   this.logger.error(`${error}`);
-                  throw new HttpException(`${error}`,500);
+                  throw new HttpException(`${error.message}`,error.status);
                 }),
               ),
           );
@@ -72,7 +72,7 @@ export class MovieService{
       .pipe(
         catchError((error: AxiosError) => {
           this.logger.error(`${error}`);
-          throw new HttpException(`${error}`,500);
+          throw new HttpException(`${error.message}`,error.status);
         }),
       ),
      );
@@ -97,7 +97,7 @@ export class MovieService{
         .pipe(
           catchError((error:AxiosError)=>{
           this.logger.error(`${error}`);
-          throw new HttpException(`${error}`,500);
+          throw new HttpException(`${error.message}`,error.status);
         })),
       );
 
@@ -121,7 +121,7 @@ export class MovieService{
         })
         .pipe(catchError((error:AxiosError)=>{
           this.logger.error(`${error}`);
-          throw new HttpException(`${error}`,500);
+          throw new HttpException(`${error.message}`,error.status);
         })),
       );
 
@@ -148,7 +148,7 @@ export class MovieService{
         .pipe(
           catchError((error:AxiosError)=>{
             this.logger.error(`${error}`);
-            throw new HttpException(`${error}`,500);
+            throw new HttpException(`${error.message}`,error.status);
           })
         ),
       );

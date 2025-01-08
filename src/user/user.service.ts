@@ -1,5 +1,5 @@
 import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { Prisma, User } from "@prisma/client";
+import { Prisma, Roles, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
@@ -40,7 +40,7 @@ export class UserService{
 
         } catch(err){
             this.logger.error(`${err.message}`);
-            throw new HttpException(`${err.message}`,500);
+            throw new HttpException(`${err.message}`,err.status);
         };
     };
 
@@ -51,7 +51,7 @@ export class UserService{
             return tryToGetAllUsers;
         }catch(err){
             this.logger.error(`${err.message}`);
-            throw new HttpException(`${err.message}`,500);
+            throw new HttpException(`${err.message}`,err.status);
         };
     };
 
@@ -66,7 +66,7 @@ export class UserService{
             return tryToFindUser;
         }catch(err){
             this.logger.error(`${err.message}`);
-            throw new HttpException(`${err.message}`,500);
+            throw new HttpException(`${err.message}`,err.status);
         };
     };
 
@@ -89,7 +89,7 @@ export class UserService{
             return searchUserEmail;
         }catch(err){
             this.logger.error(`${err.message}`);
-            throw new HttpException(`${err.message}`,500);
+            throw new HttpException(`${err.message}`,err.status);
         };
     };
 
@@ -107,7 +107,16 @@ export class UserService{
             return tryToUpdate;
         }catch(err){
             this.logger.error(`${err.message}`);
-            throw new HttpException(`${err.message}`,500);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
+
+    public async ChangeUserRole(role:Roles,id:number):Promise<User>{
+        try{
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
         };
     };
 };

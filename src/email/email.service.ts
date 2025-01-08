@@ -20,7 +20,7 @@ export class EmailService{
             return tryToSendEmail;
         } catch(err){
             this.logger.error(`${err.message}`);
-            throw new HttpException(`${err.message}`,500);
+            throw new HttpException(`${err.message}`,err.status);
         };
     };
 };
