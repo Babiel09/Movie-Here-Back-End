@@ -42,7 +42,7 @@ export class UserController{
     };
 
     @Patch("/v2/verify/:id")
-    private async verifyUser(@Param("id")id:number,@Body()data:SendEmail,@Res()res:Response):Promise<Response>{
+    private async verifyUser(@Param("id")id:number,@Res()res:Response):Promise<Response>{
         try{
             const userToVerifyEmail = await this.prisma.findUnique({
                 where:{
@@ -63,11 +63,7 @@ export class UserController{
 
             this.logger.debug(`${userVerified.verified}`);
 
-            if(data.to !== userVerified.email){
-                this.logger.error(`The data recipient is not the same of the user with this id:${userVerified.id}`);
-            };
-
-            const email = await this.emailService.sendEmail(data);
+            await this.emailService.sendEmail(userVerified.email);
 
             this.logger.log(`Email sucefully send and the user is now verified!`);
 
