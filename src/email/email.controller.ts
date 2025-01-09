@@ -9,11 +9,11 @@ export class EmailController{
     constructor(private readonly emailService:EmailService){};
 
     @Post("/v1/send")
-    private async sendOneEmail(@Body()data:SendEmail,@Res()res:Response):Promise<Response>{
+    private async sendOneEmail(@Body("email")email:string,@Res()res:Response):Promise<Response>{
         try{
-            const email = await this.emailService.sendEmail(data);
+            const newEmail = await this.emailService.sendEmailToVerify(email);
 
-            return res.status(202).json({server:`Done`});
+            return res.status(202).json({server:`Email sended for:${email}`});
 
         } catch(err){
             this.logger.error(`${err.message}`);
