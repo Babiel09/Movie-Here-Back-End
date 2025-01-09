@@ -120,4 +120,15 @@ export class UserController{
             return res.status(err.status).json({server:`${err.message}`});
         };
     };
+
+    @Get("/v1")
+    private async findAllUsers(@Res()res:Response):Promise<Response>{
+        try{
+            const allUsers = await this.userService.SelectAll();
+            return res.status(200).send(allUsers);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
 };
