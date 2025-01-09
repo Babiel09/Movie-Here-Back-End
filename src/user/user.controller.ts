@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Patch, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
@@ -35,6 +35,18 @@ export class UserController{
             return res.status(201).send(realNewUser);
             
         } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+    @Delete("/v2/delete/:id")
+    private async deleteUser(@Param("id")id:number,@Res()res:Response):Promise<Response>{
+        try{
+            await this.userService.DeleteUser(Number(id));
+
+            return res.status(204).json({server:"User deleted!"});
+        }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
         };
