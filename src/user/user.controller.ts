@@ -90,7 +90,8 @@ export class UserController{
     @UseGuards(UserGuard)
     private async changeUserRole(@Body("role")role:Roles,@Param("id")id:number,@Res()res:Response):Promise<Response>{
         try{
-
+            this.logger.warn(`This route needs **security_acess** as header param!`);
+            
             const changeUserRole = await this.userService.ChangeUserRole(role,Number(id));
 
             this.logger.debug(`New Role: ${changeUserRole.role}`);

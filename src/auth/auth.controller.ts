@@ -53,6 +53,9 @@ export class AuthController{
     @UseGuards(AuthGuard)
     public async decodeToken(@Body("token")token:string,@Res()res?:Response):Promise<Response>{
         try{
+
+            this.logger.warn(`This route needs **api_key** as header param!`);
+
             const decodifiedTOken = await this.jwtService.decode(token);
 
             this.logger.debug(`Working in a new Auth Queu!`);
