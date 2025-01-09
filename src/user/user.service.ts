@@ -141,4 +141,32 @@ export class UserService{
             throw new HttpException(`${err.message}`,err.status);
         };
     };
+
+    public async DeleteUser(id:number):Promise<User>{
+        try{
+
+            const findUserByid = await this.prisma.findUnique({
+                where:{
+                    id:id
+                }
+            });
+
+            if(!findUserByid){
+                this.logger.error(`Invalid id: ${id}`);
+                throw new HttpException(`Invalid id: ${id}`,400);
+            };
+
+            const deleteUser = await this.prisma.delete({
+                where:{
+                    id:findUserByid.id
+                }
+            });
+
+            return deleteUser;
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
 };
