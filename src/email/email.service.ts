@@ -16,7 +16,7 @@ export class EmailService{
             const tryToSendEmail = await this.mailerService.sendMail({
                 to:email,
                 from:process.env.GMAIL_USER,
-                subject:"Verificar Conta",
+                subject:"Verificação da Conta",
                 text:"Sua conta está verificada agora você pode voltar para o site!",
                 html:`
 
@@ -41,7 +41,7 @@ export class EmailService{
             const emailJob = await this.emailQueue.add(EMAIL_QUEUE,{
                jobTo:email,
                jobFrom:process.env.GMAIL_USER,
-               jobSubject:"Verificar Conta",
+               jobSubject:"Verificação da Conta",
                jobText:"Sua conta está verificada agora você pode voltar para o site!",
                jobHtml:`
         <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
