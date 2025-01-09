@@ -1,6 +1,5 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { SendEmail } from "./DTO/email.dto";
 import { InjectQueue } from "@nestjs/bull";
 import { EMAIL_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";

@@ -6,7 +6,6 @@ import { Response } from "express";
 import { PrismaService } from "prisma/prisma.service";
 import { Prisma, Roles } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import { SendEmail } from "src/email/DTO/email.dto";
 import { EmailService } from "src/email/email.service";
 import { UserGuard } from "./guards/user.guard";
 @Controller("user")

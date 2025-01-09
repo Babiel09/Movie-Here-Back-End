@@ -1,6 +1,5 @@
 import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
 import { EmailService } from "./email.service";
-import { SendEmail } from "./DTO/email.dto";
 import { Response } from "express";
 
 @Controller("email")

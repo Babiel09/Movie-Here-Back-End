@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { EmailController } from "./email.controller";
 import { EmailService } from "./email.service";
 import { MailerModule } from "@nestjs-modules/mailer";
-import { SendEmail } from "./DTO/email.dto";
 import { BullModule } from "@nestjs/bull";
 import { EMAIL_QUEUE } from "src/constants/constants";
 import { EmailProcessor } from "./processor/email.processor";
@@ -23,7 +22,7 @@ import { EmailProcessor } from "./processor/email.processor";
           }),
     ],
     controllers:[EmailController],
-    providers:[EmailService,SendEmail,EmailProcessor],
-    exports:[EmailService,SendEmail]
+    providers:[EmailService,EmailProcessor],
+    exports:[EmailService]
 })
 export class EmailModule{};
