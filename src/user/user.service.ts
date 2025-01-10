@@ -6,6 +6,10 @@ import { CreationUser } from "./DTO/user.dto";
 import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
+import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
+import { HttpService } from "@nestjs/axios";
+import { Axios, AxiosError } from "axios";
+import { error } from "console";
 
 @Injectable()
 export class UserService{
@@ -13,7 +17,8 @@ export class UserService{
     private readonly logger = new Logger(UserService.name);
     constructor(
         private readonly pr:PrismaService,
-        @InjectQueue(USER_QUEUE) private readonly userQueue:Queue
+        @InjectQueue(USER_QUEUE) private readonly userQueue:Queue,
+        private readonly httpService:HttpService,
     ){
         this.prisma = pr.user;
     };
@@ -168,5 +173,19 @@ export class UserService{
             this.logger.error(`${err.message}`);
             throw new HttpException(`${err.message}`,err.status);
         };
+    };
+
+
+    public async FingThePhotoInWeb(photo:string):Promise<Axios>{
+       const {data} =  await firstValueFrom(
+         this.httpService.get<any>(photo, {responseType: 'arraybuffer' })
+         .pipe(
+            catchError((error: AxiosError) => {
+              this.logger.error(`${error}`);
+              throw new HttpException(`${error.message}`,error.status);
+            }),
+          ),
+       );
+       return data;
     };
 };
