@@ -8,10 +8,12 @@ import { USER_QUEUE } from 'src/constants/constants';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from 'src/email/emai.module';
 import { UserGuard } from './guards/user.guard';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     imports:[
         PrismaModule,
+        HttpModule,
         BullModule.registerQueue({
             name:USER_QUEUE
         }),
