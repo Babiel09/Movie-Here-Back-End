@@ -176,9 +176,9 @@ export class UserService{
     };
 
 
-    public async FingThePhotoInWeb(photo:string):Promise<Axios>{
+    public async FingThePhotoInWeb(photo:string):Promise<ArrayBuffer>{
        const {data} =  await firstValueFrom(
-         this.httpService.get<any>(photo, {responseType: 'arraybuffer' })
+         this.httpService.get<ArrayBuffer>(photo, {responseType: 'arraybuffer' })
          .pipe(
             catchError((error: AxiosError) => {
               this.logger.error(`${error}`);
