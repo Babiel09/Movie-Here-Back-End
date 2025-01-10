@@ -12,7 +12,7 @@ model User{
   name String
   email String @unique
   password String
-  photo String @default("")
+  photo Bytes @default("")
   description String @default("")
   verified Boolean @default(false)
   createdAt DateTime @default(now())
