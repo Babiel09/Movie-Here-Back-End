@@ -8,6 +8,7 @@ import { Prisma, Roles } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { EmailService } from "src/email/email.service";
 import { UserGuard } from "./guards/user.guard";
+import { json } from "stream/consumers";
 @Controller("user")
 export class UserController{
     private readonly logger = new Logger(UserController.name);
@@ -138,6 +139,52 @@ export class UserController{
         try{
             const allUsers = await this.userService.SelectAll();
             return res.status(200).send(allUsers);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+
+    @Post("/v1/photo/:id")
+    private async changePhoto(@Res()res:Response,@Body("photo")photo:string,@Param("id")id:number):Promise<Response>{
+        try{
+
+            let arrayBuffer = await this.userService.FingThePhotoInWeb(photo);
+
+            const bytes = new Uint8Array(arrayBuffer);
+
+            this.logger.debug(typeof bytes);
+
+            const userPhoto = await this.prisma.update({
+                where:{
+                    id:Number(id),
+                },
+                data:{
+                    photo:bytes,
+                },
+            });
+
+            return res.status(202).json({server:`Your profile picture is now changed!`});
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+    @Get("/v1/photo/:id")
+    private async getThePhoto(@Res()res:Response,@Param("id")id:number):Promise<Response>{
+        try{
+            const user = await this.userService.SelectOne(Number(id));
+
+            res.setHeader("Content-Type", "image/jpeg");
+
+            this.logger.debug(Buffer.from(user.photo));
+
+            return res.status(202).send(Buffer.from(user.photo));
+
+
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
