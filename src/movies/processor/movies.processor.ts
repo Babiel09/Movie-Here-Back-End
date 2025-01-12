@@ -8,8 +8,8 @@ export class MovieProcessor{
     constructor(private readonly movieService:MovieService){};
     
     @Process("all_movies")
-    private async workerAllMovies(){
-        await this.movieService.getAllMovies();
+    private async workerAllMovies(job: Job){
+        await this.movieService.getAllMovies(job.data);
     };
 
     @Process("company_images")
