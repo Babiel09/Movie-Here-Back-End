@@ -7,6 +7,7 @@ import { AuthGuard } from "./guards/auth.guard";
 import { InjectQueue } from "@nestjs/bull";
 import { AUTH_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
+import { GoogleGuard } from "./guards/google.auth.guard";
 
 @Controller("auth")
 export class AuthController{
@@ -87,6 +88,14 @@ export class AuthController{
             return res.status(err.status).json({server:`${err.message}`});
         };
     };
+    
+    @Get("/v4/google/login")
+    @UseGuards(GoogleGuard)
+    private async googleLogin(){};
+    
+    @Get(process.env.GOOGLE_CALLBACK_URL_CONTROLLER)
+    @UseGuards(GoogleGuard)
+    private async googleCalback(){};
 
   
 };
