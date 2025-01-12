@@ -2,6 +2,7 @@ import { HttpService } from "@nestjs/axios";
 import { InjectQueue } from "@nestjs/bull";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { Axios, AxiosError } from "axios";
+import { error } from "console";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
 
@@ -152,6 +153,25 @@ export class MovieService{
         jobId:id,
       });
       this.logger.debug(`Processed job: ${JSON.stringify(ActorImageJob.data)}`);
+
+      return data;
+    };
+
+    private async getMovieMdbId(id:number):Promise<Axios>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any>(`https://api.themoviedb.org/3/movie/${id}/external_ids`,{
+          headers:{
+            Accept:"application/json",
+            Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
+          },
+        })
+        .pipe(
+          catchError((error:AxiosError)=>{
+            this.logger.error(`${error}`);
+            throw new HttpException(`${error.message}`,error.status);
+          })
+        )
+      );
 
       return data;
     };
