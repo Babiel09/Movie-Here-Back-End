@@ -9,11 +9,14 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { EmailService } from "src/email/email.service";
 import { UserGuard } from "./guards/user.guard";
 import { json } from "stream/consumers";
+import { InjectQueue } from "@nestjs/bull";
+import { USER_QUEUE } from "src/constants/constants";
+import { Queue } from "bull";
 @Controller("user")
 export class UserController{
     private readonly logger = new Logger(UserController.name);
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
-    constructor(private readonly userService:UserService, private readonly pr:PrismaService,private readonly emailService:EmailService){
+    constructor(private readonly userService:UserService, private readonly pr:PrismaService,private readonly emailService:EmailService,@InjectQueue(USER_QUEUE)private readonly userQueue:Queue){
         this.prisma = pr.user;
     };
 
@@ -147,7 +150,7 @@ export class UserController{
 
 
     @Post("/v1/photo/:id")
-    private async changePhoto(@Res()res:Response,@Body("photo")photo:string,@Param("id")id:number):Promise<Response>{
+    public async changePhoto(@Res()res:Response,@Body("photo")photo:string,@Param("id")id:number):Promise<Response>{
         try{
 
             let arrayBuffer = await this.userService.FingThePhotoInWeb(photo);
@@ -155,7 +158,7 @@ export class UserController{
             const bytes = new Uint8Array(arrayBuffer);
 
             this.logger.debug(typeof bytes);
-
+            
             const userPhoto = await this.prisma.update({
                 where:{
                     id:Number(id),
@@ -165,6 +168,13 @@ export class UserController{
                 },
             });
 
+            this.logger.debug("Working in a new job in the User Queue");
+            const photoJob = await this.userQueue.add(USER_QUEUE,{
+                jobId:userPhoto.id,
+                jobData:userPhoto.photo,
+            });
+            this.logger.debug(`Processed job: ${JSON.stringify(photoJob.data)}`);
+            
             return res.status(202).json({server:`Your profile picture is now changed!`});
 
         }catch(err){
@@ -174,11 +184,18 @@ export class UserController{
     };
 
     @Get("/v1/photo/:id")
-    private async getThePhoto(@Res()res:Response,@Param("id")id:number):Promise<Response>{
+    public async getThePhoto(@Res()res:Response,@Param("id")id:number):Promise<Response>{
         try{
             const user = await this.userService.SelectOne(Number(id));
 
             res.setHeader("Content-Type", "image/jpeg");
+
+            this.logger.debug("Working in a new job in the User Queue");
+            const photoJob = await this.userQueue.add(USER_QUEUE,{
+                jobId:user.id,
+                jobData:Buffer.from(user.photo),
+            });
+            this.logger.debug(`Processed job: ${JSON.stringify(photoJob.data)}`);
             
             return res.status(202).send(Buffer.from(user.photo));
 
