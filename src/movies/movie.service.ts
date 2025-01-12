@@ -175,4 +175,10 @@ export class MovieService{
 
       return data;
     };
+
+
+    //public async movieRating(id:number){
+    //  const imbdbId = this.getMovieMdbId(Number(id));
+    //  
+    //};
 };
