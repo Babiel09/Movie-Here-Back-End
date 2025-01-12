@@ -7,7 +7,7 @@ import { MOVIE_QUEUE } from "src/constants/constants";
 
 @Injectable()
 export class MovieService{
-    private page:number;
+    private page = 1;
     private readonly logger = new Logger(MovieService.name);
     constructor(
       private readonly httpService:HttpService,
@@ -28,11 +28,11 @@ export class MovieService{
         );
     };
 
-    public async getAllMovies():Promise<Axios[]>{
+    public async getAllMovies(page:number):Promise<Axios[]>{
 
         const { data } = await firstValueFrom(
             this.httpService
-              .get<any[]>(`https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=true&language=en-US&page=${this.page}&sort_by=popularity.desc`, {
+              .get<any[]>(`https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=true&language=en-US&page=${page}&sort_by=popularity.desc`, {
                 headers: {
                   accept: 'application/json',
                   Authorization:
@@ -49,7 +49,7 @@ export class MovieService{
 
           this.logger.debug(`Working in a new job in the Movie Queue`);
           const jobMovies = await this.movieQueue.add(MOVIE_QUEUE,{
-            jobName:`Movies Job`,
+            jobPage:page
           });
           
           this.logger.debug(`Processed job: ${JSON.stringify(jobMovies.data)}`);
