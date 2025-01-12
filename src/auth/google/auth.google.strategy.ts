@@ -1,13 +1,16 @@
+import { InjectQueue } from "@nestjs/bull";
 import { Injectable, Logger } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
+import { Queue } from "bull";
 import { Strategy,VerifyCallback } from "passport-google-oauth20";
+import { AUTH_QUEUE } from "src/constants/constants";
 import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
     private readonly logger = new Logger(GoogleStrategy.name);
-    constructor(private readonly jwtService:JwtService,private readonly userService:UserService){
+    constructor(private readonly jwtService:JwtService,private readonly userService:UserService,@InjectQueue(AUTH_QUEUE)private readonly authQueue:Queue){
         super({
             clientID:process.env.GOOGLE_CLIENT_ID,
             clientSecret:process.env.GOOGLE_CLIENT_SECRET,
@@ -36,6 +39,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
         userWithGoogle.photo = bytes;
 
         const newUserWithGoogle = await this.userService.InsertuserWIthGoogle(userWithGoogle)
+
+
+        this.logger.debug(`Working in a new Auth Queue!`);
+        const newUserGoogleJob = await this.authQueue.add(AUTH_QUEUE,{
+            jobName:userWithGoogle.name,
+            jobEmail:userWithGoogle.email,
+            jobPhoto:userWithGoogle.photo,
+            token:userWithGoogle.token
+        });
+        this.logger.debug(`Processed job: ${JSON.stringify(newUserGoogleJob.data)}`);
 
         const payload = {id:newUserWithGoogle.id,name:newUserWithGoogle.name,email:newUserWithGoogle.email,password:newUserWithGoogle.password,description:newUserWithGoogle.description}
 
