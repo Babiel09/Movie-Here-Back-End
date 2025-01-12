@@ -26,7 +26,7 @@ import { HttpModule } from '@nestjs/axios';
             }),
     ],
     controllers:[UserController],
-    providers:[UserService,UserProcessor,UserGuard],
+    providers:[UserService,UserProcessor,UserGuard,UserController],
     exports:[UserService],
 })
 export class UserModule {};
