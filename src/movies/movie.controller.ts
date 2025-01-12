@@ -19,9 +19,9 @@ export class MovieController{
     };
 
     @Get("/v1/films")
-    private async getAllMoivesSice1900(@Res()res:Response):Promise<Response>{
+    private async getAllMoivesSince1900(@Res()res:Response,@Query("page")page:number):Promise<Response>{
         try{
-            const allMovies = await this.movieService.getAllMovies();
+            const allMovies = await this.movieService.getAllMovies(Number(page));
             return res.status(200).send(allMovies);
         }catch(err){
             this.logger.error(`${err.message}`);
