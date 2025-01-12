@@ -4,7 +4,6 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { GoogleGuard } from './guards/google.auth.guard';
 import { ConfigModule } from '@nestjs/config';
-import authGoogleConfig from './config/auth.google.config';
 import { PassportModule } from '@nestjs/passport';
 import { AuthGuard } from './guards/auth.guard';
 import { BullModule } from '@nestjs/bull';
@@ -19,9 +18,6 @@ import { AuthProcessor } from './processor/auth.processor';
             signOptions: {
                 expiresIn: "30 days"
             }
-        }),
-        ConfigModule.forRoot({
-            load:[authGoogleConfig]
         }),
         PassportModule.register({ defaultStrategy: 'google' }),
         BullModule.registerQueue({
