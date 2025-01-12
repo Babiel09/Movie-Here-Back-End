@@ -29,23 +29,6 @@ export class MovieController{
         };
     };
 
-    @Put("/v1/changePage/:page")
-    private async changeTheDefaultPage(@Param("page")page:number,@Res()res:Response):Promise<Response>{
-        try{
-            if(!page){
-                this.logger.error("Please insert a valid page!");
-                return res.status(400).json("Please insert a valid page!");
-            };
-
-            this.movieService.changePage(Number(page));
-
-            return res.status(200).json({server:`New page sett: ${page}`});
-
-        }catch(err){
-            this.logger.error(`${err.message}`);
-            return res.status(err.status).json({server:`${err.message}`});
-        };
-    };
 
     @Get("/v1/findMovie/:id")
     private async findSpecifiedMovie(@Res()res:Response,@Param("id")id:number):Promise<Response>{
