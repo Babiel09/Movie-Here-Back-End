@@ -6,10 +6,10 @@ import { CreationUser } from "./DTO/user.dto";
 import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
+import * as bcrypt from "bcrypt";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpService } from "@nestjs/axios";
 import { Axios, AxiosError } from "axios";
-import { error } from "console";
 
 @Injectable()
 export class UserService{
@@ -188,4 +188,34 @@ export class UserService{
        );
        return data;
     };
+
+    public async InsertuserWIthGoogle(data:{name:string,email:string,photo:Uint8Array,token:string}):Promise<User>{
+        try{
+
+            const verifyEmail = await this.prisma.findUnique({
+                where:{
+                    email:data.email,
+                },
+            });
+
+            if(verifyEmail){
+                this.logger.error(`Email(${data.email} is already in your DB!)`);
+                throw new HttpException(`Email(${data.email} is already in your DB!)`,400);
+            };
+
+            const newUserWithGoogle = this.prisma.create({
+                data:{
+                    name:data.name,
+                    password:data.token,
+                    email:data.email,
+                    photo:data.photo
+                }
+            });
+
+            return newUserWithGoogle;
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    }
 };
