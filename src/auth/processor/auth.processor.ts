@@ -11,4 +11,9 @@ export class AuthProcessor{
     private async decoedProcessToken(job:Job){
         await this.authController.decodeToken(job.data);
     };
+
+    @Process("token")
+    private async showOAuthGoogleTokne(job:Job){
+        await this.authController.googleCalback(job.data.res,job.data.req);
+    };
 };
