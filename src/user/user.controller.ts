@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Injectable, Logger, Param, Patch, Post, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
@@ -12,6 +12,8 @@ import { json } from "stream/consumers";
 import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
+
+@Injectable()
 @Controller("user")
 export class UserController{
     private readonly logger = new Logger(UserController.name);
