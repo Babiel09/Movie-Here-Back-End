@@ -12,4 +12,14 @@ export class UserProcessor{
     private async processLogin(job:Job){
         await this.userService.Login(job.data);
     };
+
+    @Process("post_photo")
+    private async postPhotoWorker(){
+        await this.userController.changePhoto();
+    }
+
+    @Process("get_photo")
+    private async getPhotoWorker(){
+        await this.userController.getThePhoto();
+    }
 };
