@@ -1,5 +1,5 @@
-import { Body, Controller, Get, HttpException, Logger, Post, Res, UseGuards } from "@nestjs/common";
-import { Response } from "express";
+import { Body, Controller, Get, HttpException, Logger, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Request, Response } from "express";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
@@ -8,6 +8,7 @@ import { InjectQueue } from "@nestjs/bull";
 import { AUTH_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
 import { GoogleGuard } from "./guards/google.auth.guard";
+import { GoogleStrategy } from "./google/auth.google.strategy";
 
 @Controller("auth")
 export class AuthController{
@@ -15,6 +16,7 @@ export class AuthController{
     constructor(
         private readonly userService:UserService,private readonly jwtService:JwtService,
         @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue,
+        private readonly googleStrategy:GoogleStrategy
     ){};
 
     @Post("/v2/login")
@@ -95,7 +97,13 @@ export class AuthController{
     
     @Get(process.env.GOOGLE_CALLBACK_URL_CONTROLLER)
     @UseGuards(GoogleGuard)
-    private async googleCalback(){};
+    private async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
+        const user = req.user; //Dados do oauth
+
+        this.logger.debug(user);
+
+        return res.status(202).json(user.jwtToken);
+    };
 
   
 };
