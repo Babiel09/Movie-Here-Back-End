@@ -179,9 +179,7 @@ export class UserController{
             const user = await this.userService.SelectOne(Number(id));
 
             res.setHeader("Content-Type", "image/jpeg");
-
-            this.logger.debug(Buffer.from(user.photo));
-
+            
             return res.status(202).send(Buffer.from(user.photo));
 
 
