@@ -97,11 +97,11 @@ export class AuthController{
     
     @Get(process.env.GOOGLE_CALLBACK_URL_CONTROLLER)
     @UseGuards(GoogleGuard)
-    private async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
+    public async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
         const user = req.user; //Dados do oauth
         
         this.logger.debug(`Working in a new Auth Queu!`);
-        
+
         const googleJob = await this.authQueue.add(AUTH_QUEUE,{
             jobRes:res,
             jobReq:req,
