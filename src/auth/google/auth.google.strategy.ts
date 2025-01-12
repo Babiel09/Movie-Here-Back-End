@@ -43,7 +43,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
 
         this.logger.debug(token);
 
-        return token;
+        const result = {...newUserWithGoogle,jwtToken:token}
+
+        done(null,result);
         
     };
 
