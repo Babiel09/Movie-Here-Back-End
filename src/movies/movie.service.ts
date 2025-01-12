@@ -57,9 +57,6 @@ export class MovieService{
           return data;
     };
 
-    public changePage(newPage:number){
-      this.page = newPage;
-    };
 
     public async getMovieForId(id:number):Promise<Axios>{
      const {data}  = await firstValueFrom(
