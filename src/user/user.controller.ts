@@ -150,7 +150,7 @@ export class UserController{
 
 
     @Post("/v1/photo/:id")
-    public async changePhoto(@Res()res:Response,@Body("photo")photo:string,@Param("id")id:number):Promise<Response>{
+    public async changePhoto(@Res()res?:Response,@Body("photo")photo?:string,@Param("id")id?:number):Promise<Response>{
         try{
 
             let arrayBuffer = await this.userService.FingThePhotoInWeb(photo);
@@ -184,7 +184,7 @@ export class UserController{
     };
 
     @Get("/v1/photo/:id")
-    public async getThePhoto(@Res()res:Response,@Param("id")id:number):Promise<Response>{
+    public async getThePhoto(@Res()res?:Response,@Param("id")id?:number):Promise<Response>{
         try{
             const user = await this.userService.SelectOne(Number(id));
 
