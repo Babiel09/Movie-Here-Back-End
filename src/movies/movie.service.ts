@@ -7,14 +7,11 @@ import { MOVIE_QUEUE } from "src/constants/constants";
 
 @Injectable()
 export class MovieService{
-    private page = 1;
     private readonly logger = new Logger(MovieService.name);
     constructor(
       private readonly httpService:HttpService,
       @InjectQueue(MOVIE_QUEUE) private readonly movieQueue
-    ){
-      this.page = 1;
-    };
+    ){};
     
     public async movieAPITest(){
         const headers = {
@@ -110,7 +107,7 @@ export class MovieService{
 
     public async searchForActor(fullName:string,page:number):Promise<Axios[]>{
       const {data} = await firstValueFrom(
-        this.httpService.get<any[]>(`https://api.themoviedb.org/3/search/person?query=${fullName}&include_adult=true&language=en-US&page=${page}`,{
+        this.httpService.get<any[]>(`https://api.themoviedb.org/3/search/person?query=${fullName}&include_adult=false&language=en-US&page=${page}`,{
           headers:{
             accept:"application/json",
             Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
