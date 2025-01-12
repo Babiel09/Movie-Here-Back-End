@@ -40,7 +40,7 @@ export class AuthController{
 
             const payload = {id:findUserByEmail.id, name: findUserByEmail.name ,email: findUserByEmail.email, description: findUserByEmail.description,role: findUserByEmail.role, verify: findUserByEmail.verified}
 
-            const token = this.jwtService.sign(payload);
+            const token = await this.jwtService.signAsync(payload);
 
             return res.status(202).send(token);
 
@@ -57,6 +57,8 @@ export class AuthController{
         try{
 
             this.logger.warn(`This route needs **api_key** as header param!`);
+
+            const verifyToken = await this.jwtService.verifyAsync(token,process.env.JWT_SECRET)
 
             const decodifiedTOken = await this.jwtService.decode(token);
 
