@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, Logger, Post, Res, UseGuards } from "@nestjs/common";
 import { Response } from "express";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
@@ -58,7 +58,18 @@ export class AuthController{
 
             this.logger.warn(`This route needs **api_key** as header param!`);
 
-            const verifyToken = await this.jwtService.verifyAsync(token,process.env.JWT_SECRET)
+            const verifyToken = await this.jwtService.verifyAsync(
+                token,
+                {
+
+                  secret:process.env.JWT_SECRET
+                },
+            );
+
+            if(!verifyToken){
+                this.logger.error(`Token is invalid`);
+                return res.status(401).json({server:`The token is invalid!`});
+            };
 
             const decodifiedTOken = await this.jwtService.decode(token);
 
