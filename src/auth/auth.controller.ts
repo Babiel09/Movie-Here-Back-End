@@ -76,7 +76,7 @@ export class AuthController{
 
             const decodifiedTOken = await this.jwtService.decode(token);
 
-            this.logger.debug(`Working in a new Auth Queu!`);
+            this.logger.debug(`Working in a new Auth Queue!`);
             const job = await this.authQueue.add(AUTH_QUEUE,{
                 jobId:decodifiedTOken.id,
                 jobName:`Decode token${decodifiedTOken.id}`
@@ -100,7 +100,7 @@ export class AuthController{
     public async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
         const user = req.user; //Dados do oauth
         
-        this.logger.debug(`Working in a new Auth Queu!`);
+        this.logger.debug(`Working in a new Auth Queue!`);
 
         const googleJob = await this.authQueue.add(AUTH_QUEUE,{
             jobRes:res,
