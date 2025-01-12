@@ -9,7 +9,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { BullModule } from '@nestjs/bull';
 import { AUTH_QUEUE } from 'src/constants/constants';
 import { AuthProcessor } from './processor/auth.processor';
-import { GoogleStrategy } from './google/google.strategy';
+import { GoogleStrategy } from './google/auth.google.strategy';
 
 @Module({
     imports: [
