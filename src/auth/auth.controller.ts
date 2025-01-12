@@ -38,7 +38,9 @@ export class AuthController{
                 return res.status(401).json({server:`Invalid credentials!`});
             };
 
-            const token = this.jwtService.sign(findUserByEmail);
+            const payload = {id:findUserByEmail.id, name: findUserByEmail.name ,email: findUserByEmail.email, description: findUserByEmail.description,role: findUserByEmail.role, verify: findUserByEmail.verified}
+
+            const token = this.jwtService.sign(payload);
 
             return res.status(202).send(token);
 
