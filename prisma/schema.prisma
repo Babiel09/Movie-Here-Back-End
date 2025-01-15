@@ -15,10 +15,22 @@ model User{
   photo Bytes @default("")
   description String @default("")
   verified Boolean @default(false)
+  twoStetps Boolean @default(false)
   createdAt DateTime @default(now())
   role Roles @default(User)
 }
 
+model Digitis{
+  id Int @id @default(autoincrement())
+  digit String
+}
+
+model Movies{
+  realId Int @unique
+  comments String
+  upVote Int
+  avaliation Int
+}
 
 enum Roles {
   User
