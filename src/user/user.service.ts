@@ -189,7 +189,7 @@ export class UserService{
        return data;
     };
 
-    public async InsertuserWIthGoogle(data:{name:string,email:string,photo:Uint8Array,token:string}):Promise<User>{
+    public async InsertuserWIthGoogle(data:{name:string,email:string,photo:Uint8Array}):Promise<User>{
         try{
 
             const verifyEmail = await this.prisma.findUnique({
@@ -206,7 +206,7 @@ export class UserService{
             const newUserWithGoogle = this.prisma.create({
                 data:{
                     name:data.name,
-                    password:data.token,
+                    password:"",
                     email:data.email,
                     photo:data.photo
                 }

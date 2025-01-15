@@ -50,7 +50,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
         });
         this.logger.debug(`Processed job: ${JSON.stringify(newUserGoogleJob.data)}`);
 
-        const payload = {id:newUserWithGoogle.id,name:newUserWithGoogle.name,email:newUserWithGoogle.email,password:newUserWithGoogle.password,description:newUserWithGoogle.description}
+        const payload = {id:newUserWithGoogle.id,name:newUserWithGoogle.name,email:newUserWithGoogle.email,password:"",description:newUserWithGoogle.description}
 
         const token = await this.jwtService.signAsync(payload);
 
