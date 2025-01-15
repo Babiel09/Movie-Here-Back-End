@@ -143,6 +143,11 @@ export class AuthController{
             };
 
             const encryptedPassword = await bcrypt.hash(password,12);
+
+            await this.authservice.changeUserPassword(encryptedPassword,Number(id));
+
+            return res.status(202).json({server:"Password sucefully changed!"});
+
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
