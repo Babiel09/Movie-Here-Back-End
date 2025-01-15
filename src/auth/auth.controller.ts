@@ -20,8 +20,7 @@ export class AuthController{
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
     constructor(
         private readonly userService:UserService,private readonly jwtService:JwtService,
-        @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue, 
-        private readonly googleStrategy:GoogleStrategy, private readonly pr:PrismaService,
+        @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue, private readonly pr:PrismaService,
         private readonly authservice:AuthService
     ){
         this.prisma = pr.user;
@@ -44,7 +43,7 @@ export class AuthController{
 
             const verifyPassword = await bcrypt.compare(data.password,findUserByEmail.password);
 
-            if(verifyPassword === false){
+            if(!verifyPassword){
                 this.logger.error(`The password doesn't matc!`);
                 return res.status(401).json({server:`Invalid credentials!`});
             };
@@ -134,12 +133,26 @@ export class AuthController{
     };
 
     @Patch("/v4/changePassword/:id")
-    private async changeUserPassword(@Param("id")id:number,@Body("newPassword")password:string,@Res()res:Response):Promise<Response>{
+    private async changeUserPassword(@Param("id")id:number,@Body("newPassword")password:string,@Body("oldPassword")oldPassword:string,@Res()res:Response):Promise<Response>{
         try{
 
             if(!password){
                 this.logger.error(`You need to insert the password!`);
                 return res.status(401).json({server:"You need to insert the password!"});
+            };
+
+            const userToChangeThePassWord = await this.userService.SelectOne(Number(id)); 
+
+            const verifyOldPassword = await bcrypt.compare(oldPassword,userToChangeThePassWord.password);
+            
+            if(!verifyOldPassword){
+                this.logger.error(`Your old password is incorrect`);
+                return res.status(401).json({server:`Your old password is incorrect!`});
+            };
+
+            if(oldPassword === password){
+                this.logger.error(`The old password can't be the new password, please insert a new password!`);
+                return res.status(401).json({server:`The old password can't be the new password, please insert a new password!`});
             };
 
             const encryptedPassword = await bcrypt.hash(password,12);
