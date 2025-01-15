@@ -114,6 +114,12 @@ export class UserController{
     private async getSpecifiedUser(@Param("id")id:number, @Res()res:Response):Promise<Response>{
         try{
             const specifiedUser = await this.userService.SelectOne(Number(id));
+
+            if(!specifiedUser){
+                this.logger.error(`User not found, please check this id!`);
+                return res.status(400).json({server:`User not found, please check this id!`});
+            };
+
             return  res.status(200).send(specifiedUser);
         }catch(err){
             this.logger.error(`${err.message}`);
