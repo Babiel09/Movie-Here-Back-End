@@ -108,7 +108,7 @@ export class AuthController{
     public async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
         const user = req.user; //Dados do oauth
 
-        return res.status(202).json({server:`${user.jwtToken}`});
+        return res.status(202).json({token:`${user.jwtToken}`});
     };
 
     @Patch("/v4/google/newPassword/:id")
