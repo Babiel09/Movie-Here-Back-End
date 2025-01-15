@@ -13,11 +13,6 @@ export class AuthProcessor{
         await this.authController.decodeToken(job.data);
     };
 
-    @Process("token")
-    private async showOAuthGoogleTokne(job:Job){
-        await this.authController.googleCalback(job.data.res,job.data.req);
-    };
-
     @Process("new_user")
     private async googleStrategyWorker(){
         await this.googleStrategy.validate();

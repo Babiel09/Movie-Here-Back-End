@@ -104,20 +104,8 @@ export class AuthController{
     @UseGuards(GoogleGuard)
     public async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
         const user = req.user; //Dados do oauth
-
-
-
-        this.logger.debug(`Working in a new Auth Queue!`);
-
-        const googleJob = await this.authQueue.add(AUTH_QUEUE,{
-            jobRes:res,
-            jobReq:req,
-        });
-        this.logger.debug(`Processed job: ${JSON.stringify(googleJob.data)}`);
         
-        this.logger.debug(user);
-
-        return res.status(202).json(user.jwtToken);
+        return res.status(202).json({server:`${user.jwtToken}`});
     };
 
   
