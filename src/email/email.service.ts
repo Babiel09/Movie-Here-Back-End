@@ -98,10 +98,48 @@ export class EmailService{
                 `
           });
 
-            return tryToSendEmailForTheUser;;
+            return tryToSendEmailForTheUser;
         }catch(err){
             this.logger.error(`${err.message}`);
             throw new HttpException(`${err.message}`,err.status);
         };
     };
-};
+
+        public async sendEmailChangePassword(userEmail:string):Promise<MailerService>{
+            try{
+                const tryToSendEmailChangePassword  = await this.mailerService.sendMail({
+                    to:userEmail,
+                    from:process.env.GMAIL_USER,
+                    subject:"Trocar Senha",
+                    text:"Clique no botão abaixo para trocar sua senha em nosso website!",
+                    html:`
+
+          <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
+
+            <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+                <h1>Movie Here</h1>
+            </div>
+                
+            <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
+                <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                    Clique no botão abaixo para trocar sua senha em nosso website!
+                </p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
+                        Trocar Senha
+                    </a>
+                </div>
+            </div>
+        </div>
+                    `
+            });
+
+            return tryToSendEmailChangePassword;
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
+}
