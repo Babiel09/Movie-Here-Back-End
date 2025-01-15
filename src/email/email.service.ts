@@ -143,7 +143,7 @@ export class EmailService{
         };
     };
 
-    private async emailToConfirmUser(userEmail:string):Promise<MailerService>{
+    public async emailToConfirmUser(userEmail:string):Promise<MailerService>{
         try{
             const tryToSendEmailChangePassword  = await this.mailerService.sendMail({
                 to:userEmail,
