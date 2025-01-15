@@ -31,4 +31,18 @@ export class EmailController{
             return res.status(err.status).json({server:`${err.message}`});
         };
     };
+
+    @Post("/v1/generatePass")
+    private async sendGeneratePass(@Res()res:Response,@Body("email")email:string):Promise<Response>{
+        try{
+
+            const newEmail = await this.emailService.sendEmailToVerify(email);
+
+            return res.status(202).json({server:`Email sended for:${email}`});
+            
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
 };
