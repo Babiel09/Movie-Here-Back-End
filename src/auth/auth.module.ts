@@ -11,6 +11,7 @@ import { AUTH_QUEUE } from 'src/constants/constants';
 import { AuthProcessor } from './processor/auth.processor';
 import { GoogleStrategy } from './google/auth.google.strategy';
 import { PrismaModule } from 'prisma/prisma.module';
+import { AuthService } from './auth.service';
 
 @Module({
     imports: [
@@ -28,6 +29,6 @@ import { PrismaModule } from 'prisma/prisma.module';
         }),
     ],
     controllers: [AuthController],
-    providers:[GoogleGuard,AuthGuard,AuthProcessor,AuthController,GoogleStrategy],
+    providers:[GoogleGuard,AuthGuard,AuthProcessor,AuthController,GoogleStrategy,AuthService],
 })
 export class AuthModule { };
