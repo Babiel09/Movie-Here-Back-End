@@ -25,7 +25,7 @@ export class AuthService{
             };
 
             return findUser;
-            
+
         }catch(err){
             this.logger.error(`${err.message}`);
             throw new HttpException(`${err.message}`,err.status);
@@ -53,12 +53,24 @@ export class AuthService{
         };
     };
 
-   // public async changeUserPassword(oldPassword:string,newPassword:string,id:number):Promise<User>{
-   //     try{
-   //         const add 
-   //     }catch(err){
-   //         this.logger.error(`${err.message}`);
-   //         throw new HttpException(`${err.message}`,err.status);
-   //     };
-   // };
+    public async changeUserPassword(newPassword:string,id:number):Promise<User>{
+        try{
+            const findUser = await this.findUser(Number(id));
+
+            const passwordAtt = await this.prisma.update({
+                where:{
+                    id:findUser.id
+                },
+                data:{
+                    password:newPassword,
+                },
+            });
+
+            return passwordAtt;
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
 };
