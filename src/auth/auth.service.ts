@@ -73,4 +73,20 @@ export class AuthService{
             throw new HttpException(`${err.message}`,err.status);
         };
     };
+
+    public async findUserByTheEmail(email:string):Promise<User>{
+        try{
+            const userWithSpecifiedEmail = await this.prisma.findUnique({
+                where:{
+                    email:email
+                }
+            });
+
+            return userWithSpecifiedEmail;
+
+        } catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
 };
