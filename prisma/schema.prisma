@@ -17,20 +17,31 @@ model User{
   verified Boolean @default(false)
   twoStetps Boolean @default(false)
   createdAt DateTime @default(now())
+  digits Digitis[] @relation("UserDigitis")
+  comments String @default("")
+  votes Float @default(0.0) 
+  allUpVotes UpVotes[]  @relation("UserVotes")
+  allComments Comments[] @relation("UserComments")
   role Roles @default(User)
+}
+
+model Comments{
+  id Int @id @default(autoincrement())
+  user User  @relation(fields: [userId], references: [id], name:"UserComments")
+  userId Int
+}
+model UpVotes{
+  id Int @id @default(autoincrement())
+   user User  @relation(fields: [userId], references: [id], name:"UserVotes")
+   userId Int
 }
 
 model Digitis{
   id Int @id @default(autoincrement())
-  digit String
+  user User @relation(fields: [userId], references: [id], name:"UserDigitis")
+  userId Int
 }
 
-model Movies{
-  realId Int @unique
-  comments String
-  upVote Int
-  avaliation Int
-}
 
 enum Roles {
   User
