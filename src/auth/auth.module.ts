@@ -12,7 +12,7 @@ import { AuthProcessor } from './processor/auth.processor';
 import { GoogleStrategy } from './google/auth.google.strategy';
 import { PrismaModule } from 'prisma/prisma.module';
 import { AuthService } from './auth.service';
-import { CreatingGoogleUserPass } from './DTO/auth.dto';
+
 
 @Module({
     imports: [
@@ -30,6 +30,6 @@ import { CreatingGoogleUserPass } from './DTO/auth.dto';
         }),
     ],
     controllers: [AuthController],
-    providers:[GoogleGuard,AuthGuard,AuthProcessor,AuthController,GoogleStrategy,AuthService,CreatingGoogleUserPass],
+    providers:[GoogleGuard,AuthGuard,AuthProcessor,AuthController,GoogleStrategy,AuthService],
 })
 export class AuthModule { };

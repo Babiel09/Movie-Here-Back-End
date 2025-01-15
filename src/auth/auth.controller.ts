@@ -12,7 +12,6 @@ import { GoogleStrategy } from "./google/auth.google.strategy";
 import { PrismaService } from "prisma/prisma.service";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-import { CreatingGoogleUserPass } from "./DTO/auth.dto";
 import { AuthService } from "./auth.service";
 
 @Controller("auth")
@@ -112,9 +111,9 @@ export class AuthController{
     };
 
     @Patch("/v4/google/newPassword/:id")
-    private async insertAUserForTheUser(@Res()res:Response,@Body("password")password:CreatingGoogleUserPass,@Param("id")id:number):Promise<Response>{
+    private async insertAUserForTheUser(@Res()res:Response,@Body("password")password:string,@Param("id")id:number):Promise<Response>{
         try{
-            const encryptedPassword = await bcrypt.hash(String(password),12);
+            const encryptedPassword = await bcrypt.hash(password,12);
 
             this.logger.debug(encryptedPassword);
 
