@@ -9,15 +9,21 @@ import { AUTH_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
 import { GoogleGuard } from "./guards/google.auth.guard";
 import { GoogleStrategy } from "./google/auth.google.strategy";
+import { PrismaService } from "prisma/prisma.service";
+import { Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
 @Controller("auth")
 export class AuthController{
     private readonly logger = new Logger(AuthController.name);
+    private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
     constructor(
         private readonly userService:UserService,private readonly jwtService:JwtService,
-        @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue,
-        private readonly googleStrategy:GoogleStrategy
-    ){};
+        @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue, 
+        private readonly googleStrategy:GoogleStrategy, private readonly pr:PrismaService
+    ){
+        this.prisma = pr.user;
+    };
 
     @Post("/v2/login")
     private async login(@Res()res:Response, @Body()data:{email:string,password:string}):Promise<Response>{
@@ -64,7 +70,6 @@ export class AuthController{
             const verifyToken = await this.jwtService.verifyAsync(
                 token,
                 {
-
                   secret:process.env.JWT_SECRET
                 },
             );
@@ -99,7 +104,9 @@ export class AuthController{
     @UseGuards(GoogleGuard)
     public async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
         const user = req.user; //Dados do oauth
-        
+
+
+
         this.logger.debug(`Working in a new Auth Queue!`);
 
         const googleJob = await this.authQueue.add(AUTH_QUEUE,{
