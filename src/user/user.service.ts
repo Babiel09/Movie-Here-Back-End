@@ -119,16 +119,7 @@ export class UserService{
     public async ChangeUserRole(newRole:Roles,id:number):Promise<User>{
         try{
 
-            const findUser = await this.prisma.findUnique({
-                where:{
-                    id:id
-                }
-            });
-
-            if(!findUser){
-                this.logger.error(`We can't find the user with this id:${findUser.id}`);
-                throw new HttpException(`We can't find the user with this id:${findUser.id}`,400);
-            };
+            const findUser = await this.SelectOne(Number(id));
 
             const tryToChangeTheRole = await this.prisma.update({
                 where:{
@@ -150,16 +141,7 @@ export class UserService{
     public async DeleteUser(id:number):Promise<User>{
         try{
 
-            const findUserByid = await this.prisma.findUnique({
-                where:{
-                    id:id
-                }
-            });
-
-            if(!findUserByid){
-                this.logger.error(`Invalid id: ${id}`);
-                throw new HttpException(`Invalid id: ${id}`,400);
-            };
+            const findUserByid = await this.SelectOne(Number(id))
 
             const deleteUser = await this.prisma.delete({
                 where:{

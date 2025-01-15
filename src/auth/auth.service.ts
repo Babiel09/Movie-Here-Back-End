@@ -11,7 +11,7 @@ export class AuthService{
         this.prisma = pr.user;
     };
 
-    public async changeUserWithGooglePhoto(id:number,newPassword:string):Promise<User>{
+    private async findUser(id:number):Promise<User>{
         try{
             const findUser = await this.prisma.findUnique({
                 where:{
@@ -23,6 +23,18 @@ export class AuthService{
                 this.logger.error(`We can't find the user with this id: ${id}`);
                 throw new HttpException(`We can't find the user with this id: ${id}`,401);
             };
+
+            return findUser;
+            
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
+
+    public async changeUserWithGooglePhoto(id:number,newPassword:string):Promise<User>{
+        try{
+            const findUser = await this.findUser(Number(id));
 
             const updateUserWithGooglePass = await this.prisma.update({
                 where:{
@@ -40,4 +52,13 @@ export class AuthService{
             throw new HttpException(`${err.message}`,err.status);
         };
     };
+
+   // public async changeUserPassword(oldPassword:string,newPassword:string,id:number):Promise<User>{
+   //     try{
+   //         const add 
+   //     }catch(err){
+   //         this.logger.error(`${err.message}`);
+   //         throw new HttpException(`${err.message}`,err.status);
+   //     };
+   // };
 };
