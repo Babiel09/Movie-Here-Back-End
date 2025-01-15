@@ -166,4 +166,25 @@ export class AuthController{
             return res.status(err.status).json({server:`${err.message}`});
         };
     };
+
+     @Patch("/v4/createANewPassword/:id")
+     private async createANewPassword(@Param("id")id:number,@Body("password")password:string,@Res()res:Response):Promise<Response>{
+        try{
+            if(!password){
+                this.logger.error(`You need to insert the password!`);
+                return res.status(401).json({server:"You need to insert the password!"});
+            };
+
+            const userToChangeThePassWord = await this.userService.SelectOne(Number(id)); 
+
+            const encryptedPassword = await bcrypt.hash(password,12);
+
+            await this.authservice.changeUserPassword(encryptedPassword,Number(id));
+
+            return res.status(202).json({server:"Password sucefully changed!"});
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+     };
 };
