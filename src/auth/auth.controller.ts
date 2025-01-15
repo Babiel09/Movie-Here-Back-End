@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Logger, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, Logger, Param, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { Request, Response } from "express";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
@@ -12,6 +12,8 @@ import { GoogleStrategy } from "./google/auth.google.strategy";
 import { PrismaService } from "prisma/prisma.service";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { CreatingGoogleUserPass } from "./DTO/auth.dto";
+import { AuthService } from "./auth.service";
 
 @Controller("auth")
 export class AuthController{
@@ -20,7 +22,8 @@ export class AuthController{
     constructor(
         private readonly userService:UserService,private readonly jwtService:JwtService,
         @InjectQueue(AUTH_QUEUE) private readonly authQueue:Queue, 
-        private readonly googleStrategy:GoogleStrategy, private readonly pr:PrismaService
+        private readonly googleStrategy:GoogleStrategy, private readonly pr:PrismaService,
+        private readonly authservice:AuthService
     ){
         this.prisma = pr.user;
     };
@@ -104,8 +107,25 @@ export class AuthController{
     @UseGuards(GoogleGuard)
     public async googleCalback(@Res()res:Response,@Req()req):Promise<Response>{
         const user = req.user; //Dados do oauth
-        
+
         return res.status(202).json({server:`${user.jwtToken}`});
+    };
+
+    @Patch("/v4/google/newPassword/:id")
+    private async insertAUserForTheUser(@Res()res:Response,@Body("password")password:CreatingGoogleUserPass,@Param("id")id:number):Promise<Response>{
+        try{
+            const encryptedPassword = await bcrypt.hash(String(password),12);
+
+            this.logger.debug(encryptedPassword);
+
+            await this.authservice.changeUserWithGooglePhoto(Number(id),encryptedPassword);
+
+            return res.status(202).json({server:"New password added with sucess!"});
+
+        } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
     };
 
   
