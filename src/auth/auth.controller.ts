@@ -113,6 +113,12 @@ export class AuthController{
     @Patch("/v4/google/newPassword/:id")
     private async insertAUserForTheUser(@Res()res:Response,@Body("password")password:string,@Param("id")id:number):Promise<Response>{
         try{
+            
+            if(!password){
+                this.logger.error(`You need to insert the password!`);
+                return res.status(401).json({server:"You need to insert the password!"});
+            };
+
             const encryptedPassword = await bcrypt.hash(password,12);
 
             this.logger.debug(encryptedPassword);
@@ -127,5 +133,19 @@ export class AuthController{
         };
     };
 
-  
+    @Patch("/v4/changePassword/:id")
+    private async changeUserPassword(@Param("id")id:number,@Body("newPassword")password:string,@Res()res:Response):Promise<Response>{
+        try{
+
+            if(!password){
+                this.logger.error(`You need to insert the password!`);
+                return res.status(401).json({server:"You need to insert the password!"});
+            };
+
+            const encryptedPassword = await bcrypt.hash(password,12);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
 };
