@@ -10,10 +10,12 @@ import { BullModule } from '@nestjs/bull';
 import { AUTH_QUEUE } from 'src/constants/constants';
 import { AuthProcessor } from './processor/auth.processor';
 import { GoogleStrategy } from './google/auth.google.strategy';
+import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
     imports: [
         UserModule,
+        PrismaModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET,
             signOptions: {
