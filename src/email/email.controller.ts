@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
+import { Body, Controller, Logger, Param, Post, Res } from "@nestjs/common";
 import { EmailService } from "./email.service";
 import { Response } from "express";
 
@@ -15,6 +15,18 @@ export class EmailController{
             return res.status(202).json({server:`Email sended for:${email}`});
 
         } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+    @Post("/v1/changePass")
+    private async sendPassEmail(@Res()res:Response,@Body("email")email:string):Promise<Response>{
+        try{
+            const newEmail = await this.emailService.sendEmailChangePassword(email);
+
+            return res.status(202).json({server:`Email sended for:${email}`});
+        }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
         };
