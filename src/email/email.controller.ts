@@ -12,7 +12,7 @@ export class EmailController{
         try{
             const newEmail = await this.emailService.sendEmailToVerify(email);
 
-            return res.status(202).json({server:`Email sended for:${email}`});
+            return res.status(202).json({server:`Email sent for:${email}`});
 
         } catch(err){
             this.logger.error(`${err.message}`);
@@ -25,7 +25,7 @@ export class EmailController{
         try{
             const newEmail = await this.emailService.sendEmailChangePassword(email);
 
-            return res.status(202).json({server:`Email sended for:${email}`});
+            return res.status(202).json({server:`Email sent for:${email}`});
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
@@ -38,7 +38,7 @@ export class EmailController{
 
             const newEmail = await this.emailService.emailToConfirmUser(email);
 
-            return res.status(202).json({server:`Email sended for:${email}`});
+            return res.status(202).json({server:`Email sent for:${email}`});
 
         }catch(err){
             this.logger.error(`${err.message}`);
