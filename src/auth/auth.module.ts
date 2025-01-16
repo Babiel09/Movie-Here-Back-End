@@ -3,7 +3,6 @@ import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { GoogleGuard } from './guards/google.auth.guard';
-import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { AuthGuard } from './guards/auth.guard';
 import { BullModule } from '@nestjs/bull';
@@ -12,12 +11,14 @@ import { AuthProcessor } from './processor/auth.processor';
 import { GoogleStrategy } from './google/auth.google.strategy';
 import { PrismaModule } from 'prisma/prisma.module';
 import { AuthService } from './auth.service';
+import { EmailModule } from 'src/email/emai.module';
 
 
 @Module({
     imports: [
         UserModule,
         PrismaModule,
+        EmailModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET,
             signOptions: {
