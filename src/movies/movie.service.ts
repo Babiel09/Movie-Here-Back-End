@@ -31,7 +31,6 @@ export class MovieService{
 
         if(tryToFindMovie){
           this.logger.error(`The movie are in our DB!`);
-          throw new HttpException("The movie are in our DB!",409);
         };
 
         return tryToFindMovie;
@@ -44,7 +43,11 @@ export class MovieService{
     private async injetMoveInDB(id:number):Promise<Movies>{
       try{
 
+        const tryToFindMovie = await this.searchMovieIdInDB(Number(id));
 
+        if(tryToFindMovie){
+          return null;
+        };
 
         const newMovie = await this.prisma.create({
           data:{
