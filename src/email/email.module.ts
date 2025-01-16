@@ -5,6 +5,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { BullModule } from "@nestjs/bull";
 import { EMAIL_QUEUE } from "src/constants/constants";
 import { EmailProcessor } from "./processor/email.processor";
+import { PrismaModule } from "prisma/prisma.module";
 
 @Module({
     imports:[
@@ -20,6 +21,7 @@ import { EmailProcessor } from "./processor/email.processor";
           BullModule.registerQueue({
             name:EMAIL_QUEUE
           }),
+          PrismaModule,
     ],
     controllers:[EmailController],
     providers:[EmailService,EmailProcessor],
