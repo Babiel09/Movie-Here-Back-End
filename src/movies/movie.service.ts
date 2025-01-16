@@ -21,17 +21,13 @@ export class MovieService{
       this.prisma = pr.movies;
     };
 
-    private async searchMovieIdInDB(id:number):Promise<Movies>{
+    private async searchMovieIdInDB(id:number):Promise<Movies | null>{
       try{
-        const tryToFindMovie = await this.prisma.findUnique({
+        const tryToFindMovie = await this.prisma.findFirst({
           where:{
             realId:id,
           }
         });
-
-        if(tryToFindMovie){
-          this.logger.error(`The movie are in our DB!`);
-        };
 
         return tryToFindMovie;
       } catch(error){
@@ -43,11 +39,11 @@ export class MovieService{
     private async injetMoveInDB(id:number):Promise<Movies>{
       try{
 
-        const tryToFindMovie = await this.searchMovieIdInDB(Number(id));
+        const movieINDB = await this.searchMovieIdInDB(Number(id));
 
-        if(tryToFindMovie){
-          return null;
-        };
+        if(movieINDB){
+          return movieINDB;
+        }
 
         const newMovie = await this.prisma.create({
           data:{
@@ -128,10 +124,10 @@ export class MovieService{
      this.logger.debug(`Processed job: ${JSON.stringify(specifiedMovieJob.data)}`);
 
      const addedNewMovieINDB = await this.injetMoveInDB(Number(id));
+    
+    this.logger.debug(addedNewMovieINDB.realId);
 
-     this.logger.debug(addedNewMovieINDB.realId);
-
-     return data
+    return data;
     };
 
     public async getCompanyLogos(id:number):Promise<Axios>{
