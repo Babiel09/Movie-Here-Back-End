@@ -4,11 +4,13 @@ import { InjectQueue } from "@nestjs/bull";
 import { EMAIL_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
 import { PrismaService } from "prisma/prisma.service";
+import { Prisma, User } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
 @Injectable()
 export class EmailService{
     private readonly logger = new Logger(EmailService.name);
-    private readonly prisma;
+    private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
     constructor(private readonly mailerService:MailerService,@InjectQueue(EMAIL_QUEUE)private readonly emailQueue:Queue,private readonly pr:PrismaService){
         this.prisma = pr.user;
     };
@@ -198,7 +200,8 @@ export class EmailService{
                 realDigits.push(digits);
             };
 
-            const digitisTOTheDB = await this.prisma.create({
+
+            const digitisTOTheDB = await this.prisma.update({
                 where:{
                     email:userEmail
                 },
@@ -209,7 +212,7 @@ export class EmailService{
 
             this.logger.debug(digitisTOTheDB);
 
-            const tryToSendEmailChangePassword  = await this.mailerService.sendMail({
+            const tryToSendEmailWithDigitis  = await this.mailerService.sendMail({
                 to:userEmail,
                 from:process.env.GMAIL_USER,
                 subject:"Efetuar Login",
@@ -237,7 +240,7 @@ export class EmailService{
                 `
         });
 
-        return tryToSendEmailChangePassword;
+        return tryToSendEmailWithDigitis;
 
         }catch(err){
             this.logger.error(`${err.message}`);
@@ -248,7 +251,7 @@ export class EmailService{
     public async confirmVerify(userEmail:string):Promise<MailerService>{
         try{
             
-            let wthOutDigitis:number[] = [0]
+            const wthOutDigitis:number[] = [];
 
             const digitisTOTheDB = await this.prisma.update({
                 where:{
@@ -261,7 +264,7 @@ export class EmailService{
 
             console.log(digitisTOTheDB);
 
-            const tryToSendEmailChangePassword  = await this.mailerService.sendMail({
+            const tryToSendEmailWithConfirm  = await this.mailerService.sendMail({
                 to:userEmail,
                 from:process.env.GMAIL_USER,
                 subject:"Efetuar Login",
@@ -284,7 +287,7 @@ export class EmailService{
                 `
         });
 
-        return tryToSendEmailChangePassword;
+        return tryToSendEmailWithConfirm;
 
         }catch(err){
             this.logger.error(`${err.message}`);
