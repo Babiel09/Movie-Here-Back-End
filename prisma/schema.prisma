@@ -21,19 +21,32 @@ model User{
   comments String @default("")
   votes Float @default(0.0) 
   allUpVotes UpVotes[]  @relation("UserVotes")
-  allComments Comments[] @relation("UserComments")
+  allComments Comments[] @relation("UserComments") 
   role Roles @default(User)
 }
 
-model Comments{
-  id Int @id @default(autoincrement())
-  user User  @relation(fields: [userId], references: [id], name:"UserComments")
-  userId Int
+
+
+model Comments {
+  id      Int     @id @default(autoincrement())
+  user    User    @relation(fields: [userId], references: [id], name: "UserComments")
+  userId  Int
+  movie   Movies  @relation(fields: [movieId], references: [realId], name: "MovieComments")
+  movieId Int
 }
-model UpVotes{
-    id Int @id @default(autoincrement())
-   user User  @relation(fields: [userId], references: [id], name:"UserVotes")
-   userId Int
+
+model UpVotes {
+  id      Int     @id @default(autoincrement())
+  user    User    @relation(fields: [userId], references: [id], name: "UserVotes")
+  userId  Int
+  movie   Movies  @relation(fields: [movieId], references: [realId], name: "MovieVotes")
+  movieId Int
+}
+
+model Movies {
+  realId    Int        @id @default(autoincrement())
+  comments  Comments[] @relation("MovieComments")
+  votes     UpVotes[]  @relation("MovieVotes")
 }
 
 enum Roles {
