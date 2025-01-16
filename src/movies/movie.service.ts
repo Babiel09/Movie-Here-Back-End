@@ -101,6 +101,10 @@ export class MovieService{
      });
      this.logger.debug(`Processed job: ${JSON.stringify(specifiedMovieJob.data)}`);
 
+     const addedNewMovieINDB = await this.injetMoveInDB(Number(id));
+
+     this.logger.debug(addedNewMovieINDB.realId);
+
      return data
     };
 
