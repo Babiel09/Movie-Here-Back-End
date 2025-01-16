@@ -11,7 +11,7 @@ import { AuthProcessor } from './processor/auth.processor';
 import { GoogleStrategy } from './google/auth.google.strategy';
 import { PrismaModule } from 'prisma/prisma.module';
 import { AuthService } from './auth.service';
-import { EmailModule } from 'src/email/emai.module';
+import { EmailModule } from 'src/email/email.module';
 
 
 @Module({

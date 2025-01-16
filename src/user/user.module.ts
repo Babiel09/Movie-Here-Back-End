@@ -6,7 +6,7 @@ import { UserProcessor } from './processor/user.processor';
 import { BullModule } from '@nestjs/bull';
 import { USER_QUEUE } from 'src/constants/constants';
 import { JwtModule } from '@nestjs/jwt';
-import { EmailModule } from 'src/email/emai.module';
+import { EmailModule } from 'src/email/email.module';
 import { UserGuard } from './guards/user.guard';
 import { HttpModule } from '@nestjs/axios';
 

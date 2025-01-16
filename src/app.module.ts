@@ -4,7 +4,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MovieModule } from './movies/movie.module';
-import { EmailModule } from './email/emai.module';
+import { EmailModule } from './email/email.module';
 
 
 @Module({
