@@ -1,18 +1,25 @@
 import { HttpService } from "@nestjs/axios";
 import { InjectQueue } from "@nestjs/bull";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Axios, AxiosError } from "axios";
 import { error } from "console";
+import { PrismaService } from "prisma/prisma.service";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
 
 @Injectable()
 export class MovieService{
     private readonly logger = new Logger(MovieService.name);
+    private readonly prisma: Prisma.MoviesDelegate<DefaultArgs>;
     constructor(
       private readonly httpService:HttpService,
-      @InjectQueue(MOVIE_QUEUE) private readonly movieQueue
-    ){};
+      @InjectQueue(MOVIE_QUEUE) private readonly movieQueue,
+      private readonly pr:PrismaService,
+    ){
+      this.prisma = pr.movies;
+    };
     
     public async movieAPITest(){
         const headers = {
