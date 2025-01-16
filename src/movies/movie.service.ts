@@ -21,8 +21,31 @@ export class MovieService{
       this.prisma = pr.movies;
     };
 
+    private async searchMovieIdInDB(id:number):Promise<Movies>{
+      try{
+        const tryToFindMovie = await this.prisma.findUnique({
+          where:{
+            realId:id,
+          }
+        });
+
+        if(tryToFindMovie){
+          this.logger.error(`The movie are in our DB!`);
+          throw new HttpException("The movie are in our DB!",409);
+        };
+
+        return tryToFindMovie;
+      } catch(error){
+        this.logger.error(`${error}`);
+        throw new HttpException(`${error.message}`,error.status);
+      };
+    };
+
     private async injetMoveInDB(id:number):Promise<Movies>{
       try{
+
+
+
         const newMovie = await this.prisma.create({
           data:{
             realId:Number(id)
