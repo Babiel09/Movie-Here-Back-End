@@ -1,7 +1,7 @@
 import { HttpService } from "@nestjs/axios";
 import { InjectQueue } from "@nestjs/bull";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Movies, Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Axios, AxiosError } from "axios";
 import { error } from "console";
@@ -19,6 +19,22 @@ export class MovieService{
       private readonly pr:PrismaService,
     ){
       this.prisma = pr.movies;
+    };
+
+    private async injetMoveInDB(id:number):Promise<Movies>{
+      try{
+        const newMovie = await this.prisma.create({
+          data:{
+            realId:Number(id)
+          }
+        });
+
+        return newMovie;
+
+      } catch(error){
+        this.logger.error(`${error}`);
+        throw new HttpException(`${error.message}`,error.status);
+      };
     };
     
     public async movieAPITest(){
