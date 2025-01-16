@@ -31,7 +31,7 @@ model Comments {
   id      Int     @id @default(autoincrement())
   user    User    @relation(fields: [userId], references: [id], name: "UserComments")
   userId  Int
-  movie   Movies  @relation(fields: [movieId], references: [realId], name: "MovieComments")
+  movie   Movies  @relation(fields: [movieId], references: [id], name: "MovieComments")
   movieId Int
 }
 
@@ -39,12 +39,13 @@ model UpVotes {
   id      Int     @id @default(autoincrement())
   user    User    @relation(fields: [userId], references: [id], name: "UserVotes")
   userId  Int
-  movie   Movies  @relation(fields: [movieId], references: [realId], name: "MovieVotes")
+  movie   Movies  @relation(fields: [movieId], references: [id], name: "MovieVotes")
   movieId Int
 }
 
 model Movies {
-  realId    Int        @id @default(autoincrement())
+  id Int  @id @default(autoincrement())
+  realId    Int       
   comments  Comments[] @relation("MovieComments")
   votes     UpVotes[]  @relation("MovieVotes")
 }
