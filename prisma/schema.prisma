@@ -45,7 +45,7 @@ model UpVotes {
 
 model Movies {
   id Int  @id @default(autoincrement())
-  realId    Int     
+  realId    Int     @unique
   comments  Comments[] @relation("MovieComments")
   votes     UpVotes[]  @relation("MovieVotes")
 }
