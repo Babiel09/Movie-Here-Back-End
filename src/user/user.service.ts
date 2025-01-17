@@ -11,6 +11,7 @@ import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpService } from "@nestjs/axios";
 import { Axios, AxiosError } from "axios";
 
+
 @Injectable()
 export class UserService{
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
@@ -116,16 +117,13 @@ export class UserService{
     public async CreateAComment(movieId:number,userComment:string,userId:number):Promise<Comments>{
         try{
 
-            const movie = await this.findMovie(Number(movieId));
+            const movie = await this.findMovie(movieId);
 
-            const newComment = await this.pr.comments.update({
-                where:{
-                    id:userId,
-                },
+            const newComment = await this.pr.comments.create({
                 data:{
                     comment:userComment,
                     userId:userId,
-                    movieId:Number(movie.id),
+                    movieId:movie.id,
                 },
             });
 
