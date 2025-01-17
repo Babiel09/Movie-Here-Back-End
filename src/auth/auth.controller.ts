@@ -65,7 +65,6 @@ export class AuthController {
                 digits:findUserByEmail.digits,
                 verified: findUserByEmail.verified, 
                 twoSteps: findUserByEmail.twoStetps, 
-                votes: findUserByEmail.votes 
             };
 
             const token = await this.jwtService.signAsync(payload);
@@ -245,7 +244,6 @@ export class AuthController {
                 digits:wthOutDigitis,
                 verified: findUserByEmail.verified, 
                 twoSteps: findUserByEmail.twoStetps, 
-                votes: findUserByEmail.votes 
             };
 
             const token = await this.jwtService.signAsync(payload);
