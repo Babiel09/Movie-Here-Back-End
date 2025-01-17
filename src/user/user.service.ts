@@ -1,5 +1,5 @@
 import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { Prisma, Roles, User } from "@prisma/client";
+import { Movies, Prisma, Roles, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
@@ -97,6 +97,32 @@ export class UserService{
             throw new HttpException(`${err.message}`,err.status);
         };
     };
+
+    private async findMovie(movieId:number):Promise<Movies>{
+        try{
+            const tryToFindMovie = await this.pr.movies.findUnique({
+                where:{
+                    realId:movieId,
+                }
+            });
+
+            return tryToFindMovie;
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            throw new HttpException(`${err.message}`,err.status);
+        };
+    };
+
+    //public async CreateAComment(movieId:number,comment:string):Promise<User>{
+    //    try{
+//
+    //        const movie
+//
+    //    }catch(err){
+    //        this.logger.error(`${err.message}`);
+    //        throw new HttpException(`${err.message}`,err.status);
+    //    };
+    //};
 
     public async UpdateDescription(id:number,description:string):Promise<User>{
         try{
