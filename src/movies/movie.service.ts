@@ -23,7 +23,7 @@ export class MovieService{
 
     private async searchMovieIdInDB(id:number):Promise<Movies | null>{
       try{
-        const tryToFindMovie = await this.prisma.findFirst({
+        const tryToFindMovie = await this.prisma.findUnique({
           where:{
             realId:id,
           }
