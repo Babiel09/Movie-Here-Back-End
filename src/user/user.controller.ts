@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Injectable, Logger, Param, Patch, Post, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Injectable, Logger, Param, Patch, Post, Query, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
@@ -12,6 +12,7 @@ import { json } from "stream/consumers";
 import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
+
 
 @Injectable()
 @Controller("user")
@@ -104,6 +105,20 @@ export class UserController{
             return res.status(200).send(changeUserRole);
 
         } catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+    @Post("/v1/newComment")
+    private async createComment(@Query("userId")userId:number,@Query("movieId")movieId:number,@Body("userComment")userComment:string,@Res()res:Response):Promise<Response>{
+        try{
+
+           const createNewComment = await this.userService.CreateAComment(Number(movieId),userComment,Number(userId));
+
+           return res.status(201).send(createNewComment);
+
+        }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
         };
