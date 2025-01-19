@@ -104,6 +104,38 @@ export class EmailService{
                 `
           });
 
+          
+          this.logger.debug("Working in a new job in the Email Queue");
+            
+          const emailJobVerify = await this.emailQueue.add(EMAIL_QUEUE,{
+             jobTo:userEmail,
+             jobFrom:process.env.GMAIL_USER,
+             jobSubject:"Verificar sua Conta",
+             jobText:"Clique no botão abaixo para verificar sua conta em nosso website!",
+             jobHtml:`
+      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
+
+        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+            <h1>Movie Here</h1>
+        </div>
+    
+        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
+            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                Clique no botão abaixo para verificar sua conta em nosso website!
+            </p>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
+                    Verificar
+                </a>
+            </div>
+        </div>
+    </div>
+             `
+          });
+
+          this.logger.debug(`Processed job: ${JSON.stringify(emailJobVerify.data)}`);
+
             return tryToSendEmailForTheUser;
         }catch(err){
             this.logger.error(`${err.message}`);
@@ -140,6 +172,39 @@ export class EmailService{
         </div>
                     `
             });
+
+                
+          this.logger.debug("Working in a new job in the Email Queue");
+            
+          const emailJobPassword = await this.emailQueue.add(EMAIL_QUEUE,{
+             jobTo:userEmail,
+             jobFrom:process.env.GMAIL_USER,
+             jobSubject:"Trocar Senha",
+             jobText:"Clique no botão abaixo para trocar sua senha em nosso website!",
+             jobHtml:`
+    
+          <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
+
+            <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+                <h1>Movie Here</h1>
+            </div>
+                
+            <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
+                <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                    Clique no botão abaixo para trocar sua senha em nosso website!
+                </p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
+                        Trocar Senha
+                    </a>
+                </div>
+            </div>
+        </div>
+             `
+          });
+
+          this.logger.debug(`Processed job: ${JSON.stringify(emailJobPassword.data)}`);
 
             return tryToSendEmailChangePassword;
 
@@ -178,6 +243,39 @@ export class EmailService{
     </div>
                 `
         });
+
+        this.logger.debug("Working in a new job in the Email Queue");
+            
+        const emailJobRecoverPassword = await this.emailQueue.add(EMAIL_QUEUE,{
+           jobTo:userEmail,
+           jobFrom:process.env.GMAIL_USER,
+           jobSubject:"Recuperação de senha",
+           jobText:"Recuperar senha da sua conta.",
+           jobHtml:`
+  
+       
+      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
+
+        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+            <h1>Movie Here</h1>
+        </div>
+            
+        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
+            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                Por favor, caso queira recuperar sua senha, por favor acesse o link do botão abaixo.
+            </p>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
+                    Recuperar Senha
+                </a>
+            </div>
+        </div>
+    </div>
+           `
+        });
+
+        this.logger.debug(`Processed job: ${JSON.stringify(emailJobRecoverPassword.data)}`);
 
         return tryToSendEmailChangePassword;
 
@@ -240,6 +338,38 @@ export class EmailService{
                 `
         });
 
+        this.logger.debug("Working in a new job in the Email Queue");
+            
+        const emailJobTwoStepsVerification = await this.emailQueue.add(EMAIL_QUEUE,{
+           jobTo:userEmail,
+           jobFrom:process.env.GMAIL_USER,
+           jobSubject:"Efetuar Login",
+           jobText:"Código de login!",
+           jobHtml:`
+  
+     <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
+
+        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+            <h1>Movie Here</h1>
+        </div>
+            
+        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
+            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                Aqui está o código de login:
+            </p>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <h2 style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px;">
+                   ${realDigits}
+                </h2>
+            </div>
+        </div>
+    </div>
+           `
+        });
+
+        this.logger.debug(`Processed job: ${JSON.stringify(emailJobTwoStepsVerification.data)}`);
+
         return tryToSendEmailWithDigitis;
 
         }catch(err){
@@ -268,7 +398,7 @@ export class EmailService{
                 to:userEmail,
                 from:process.env.GMAIL_USER,
                 subject:"Efetuar Login",
-                text:"Lógin confirmado!",
+                text:"Login confirmado!",
                 html:`
 
       <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
@@ -286,6 +416,33 @@ export class EmailService{
     </div>
                 `
         });
+
+        this.logger.debug("Working in a new job in the Email Queue");
+            
+        const emailJobTwoStepsVerificationCode = await this.emailQueue.add(EMAIL_QUEUE,{
+           jobTo:userEmail,
+           jobFrom:process.env.GMAIL_USER,
+           jobSubject:"Efetuar Login",
+           jobText:"Login confirmado",
+           jobHtml:`
+  
+      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
+
+        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
+            <h1>Movie Here</h1>
+        </div>
+            
+        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
+            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                Login confirmado!
+            </p>
+            </div>
+        </div>
+    </div>
+           `
+        });
+
+        this.logger.debug(`Processed job: ${JSON.stringify(emailJobTwoStepsVerificationCode.data)}`);
 
         return tryToSendEmailWithConfirm;
 
