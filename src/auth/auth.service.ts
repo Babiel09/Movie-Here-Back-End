@@ -76,6 +76,13 @@ export class AuthService{
                 },
             });
 
+            this.logger.debug(`Working in a new Auth Queue!`);
+            const cahngePassJob = await this.authQueue.add(AUTH_QUEUE,{
+                jobId:passwordAtt.id,
+                jobPass:passwordAtt.password,
+            });
+            this.logger.debug(`Processed job: ${JSON.stringify(cahngePassJob.data)}`);
+
             return passwordAtt;
 
         }catch(err){
