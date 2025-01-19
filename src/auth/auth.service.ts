@@ -35,7 +35,7 @@ export class AuthService{
         };
     };
 
-    public async changeUserWithGooglePassword(id:number,newPassword:string):Promise<User>{
+    public async creatUserWithGooglePassword(id:number,newPassword:string):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
 
