@@ -50,8 +50,8 @@ export class AuthService{
 
             this.logger.debug(`Working in a new Auth Queue!`);
             const passJob = await this.authQueue.add(AUTH_QUEUE,{
-                jobId:updateUserWithGooglePass.id,
-                jobPass:updateUserWithGooglePass.password,
+                id:updateUserWithGooglePass.id,
+                newPassword:updateUserWithGooglePass.password,
             });
             this.logger.debug(`Processed job: ${JSON.stringify(passJob.data)}`);
 
