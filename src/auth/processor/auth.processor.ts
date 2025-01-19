@@ -21,6 +21,11 @@ export class AuthProcessor{
 
     @Process("new_password_google_aouth20")
     private async googleCreatePassword(job:Job){
-        await this.authService.changeUserWithGooglePassword(job.data.id,job.data.newPassword);
+        await this.authService.creatUserWithGooglePassword(job.data.id,job.data.newPassword);
+    };
+
+    @Process("change_password")
+    private async changeUserPassword(job:Job){
+        await this.authService.changeUserPassword(job.data.id,job.data.pass);
     };
 };
