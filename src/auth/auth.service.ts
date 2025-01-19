@@ -1,13 +1,16 @@
+import { InjectQueue } from "@nestjs/bull";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { Prisma, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { Queue } from "bull";
 import { PrismaService } from "prisma/prisma.service";
+import { AUTH_QUEUE } from "src/constants/constants";
 
 @Injectable()
 export class AuthService{
     private readonly logger = new Logger(AuthService.name);
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
-    constructor(private readonly pr:PrismaService){
+    constructor(private readonly pr:PrismaService,@InjectQueue(AUTH_QUEUE) private readonly authQueue: Queue){
         this.prisma = pr.user;
     };
 
@@ -32,7 +35,7 @@ export class AuthService{
         };
     };
 
-    public async changeUserWithGooglePhoto(id:number,newPassword:string):Promise<User>{
+    public async changeUserWithGooglePassword(id:number,newPassword:string):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
 
@@ -44,6 +47,13 @@ export class AuthService{
                     password:newPassword,
                 },
             });
+
+            this.logger.debug(`Working in a new Auth Queue!`);
+            const passJob = await this.authQueue.add(AUTH_QUEUE,{
+                jobId:updateUserWithGooglePass.id,
+                jobPass:updateUserWithGooglePass.password,
+            });
+            this.logger.debug(`Processed job: ${JSON.stringify(passJob.data)}`);
 
             return updateUserWithGooglePass;
 
