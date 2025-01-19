@@ -139,7 +139,7 @@ export class AuthController {
 
             this.logger.debug(encryptedPassword);
 
-            await this.authservice.changeUserWithGooglePhoto(Number(id), encryptedPassword);
+            await this.authservice.creatUserWithGooglePassword(Number(id), encryptedPassword);
 
             return res.status(202).json({ server: "New password added with sucess!" });
 
