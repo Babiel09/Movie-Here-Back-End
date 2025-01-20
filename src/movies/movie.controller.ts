@@ -1,6 +1,7 @@
-import { Controller, Get, Logger, Param, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { MovieService } from "./movie.service";
 import { Response } from "express";
+import { VoteMovieDTO } from './DTO/movie.rate.dto';
 
 @Controller("movie")
 export class MovieController{
@@ -78,6 +79,19 @@ export class MovieController{
             const userPhotos = await this.movieService.getActorImages(id);
 
             return res.status(200).send(userPhotos);
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
+    @Post("/v1/rateMovie")
+    private async reateMovie(@Res()res:Response,@Body()data:VoteMovieDTO):Promise<Response>{
+        try{
+            const ratemovie = await this.movieService.rateMovieInDb(data);
+
+            return res.status(200).send(ratemovie);
 
         }catch(err){
             this.logger.error(`${err.message}`);
