@@ -107,4 +107,18 @@ export class MovieController{
             return res.status(err.status).json({server:`${err.message}`});
         };
     };
+
+    @Get("/v1/orderByVotes")
+    private async getMoviesCountVote(@Query("page")page:number,@Res()res:Response):Promise<Response>{
+        try{
+            const moviesPerVote = await this.movieService.findMoviesPerVote(Number(page));
+
+            return res.status(200).send({totalPages:moviesPerVote.totalPages,currentPage:moviesPerVote.currentPage,movies:moviesPerVote.findMovieForTheMoreVotes});
+
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+
+    };
 };
