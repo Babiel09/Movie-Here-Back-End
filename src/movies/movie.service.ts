@@ -29,6 +29,11 @@ export class MovieService{
           }
         });
 
+        if(!tryToFindMovie){
+          this.logger.error("We can't find the movie with this id in our DB!");
+          throw new HttpException(`We can't find the movie with this id (${id}) in our DB!`,400);
+        };
+
         return tryToFindMovie;
       } catch(error){
         this.logger.error(`${error}`);
@@ -206,28 +211,10 @@ export class MovieService{
       return data;
     };
 
-    private async getMovieMdbId(id:number):Promise<Axios>{
-      const {data} = await firstValueFrom(
-        this.httpService.get<any>(`https://api.themoviedb.org/3/movie/${id}/external_ids`,{
-          headers:{
-            Accept:"application/json",
-            Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
-          },
-        })
-        .pipe(
-          catchError((error:AxiosError)=>{
-            this.logger.error(`${error}`);
-            throw new HttpException(`${error.message}`,error.status);
-          })
-        )
-      );
-
-      return data;
-    };
+    public async rateMovie(movieId:number){
+          const findMovie = await  this.searchMovieIdInDB(Number(movieId));
 
 
-    //public async movieRating(id:number){
-    //  const imbdbId = this.getMovieMdbId(Number(id));
-    //  
-    //};
+      };
+
 };
