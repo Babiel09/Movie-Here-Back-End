@@ -1,13 +1,14 @@
 import { HttpService } from "@nestjs/axios";
 import { InjectQueue } from "@nestjs/bull";
 import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { Movies, Prisma } from "@prisma/client";
+import { Movies, Prisma, UpVotes } from '@prisma/client';
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Axios, AxiosError } from "axios";
 import { error } from "console";
 import { PrismaService } from "prisma/prisma.service";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
+import { VoteMovieDTO } from './DTO/movie.rate.dto';
 
 @Injectable()
 export class MovieService{
@@ -203,17 +204,26 @@ export class MovieService{
       );
 
       this.logger.debug("Working in a new job in the Movie Queue");
-      const ActorImageJob = await this.movieQueue.add(MOVIE_QUEUE,{
-        jobId:id,
+      const ActorImageJob = await this.movieQueue.add(MOVIE_QUEUE, {
+        jobId: id,
       });
       this.logger.debug(`Processed job: ${JSON.stringify(ActorImageJob.data)}`);
 
       return data;
     };
 
-    public async rateMovie(movieId:number){
+    public async rateMovieInDb({ movieId, userId,vote }:VoteMovieDTO):Promise<UpVotes>{
           const findMovie = await  this.searchMovieIdInDB(Number(movieId));
 
+          const newVote = await this.pr.upVotes.create({
+            data:{
+              userId:userId,
+              movieId:movieId,
+              vote:vote,
+            },
+          });
+
+          return newVote;
 
       };
 
