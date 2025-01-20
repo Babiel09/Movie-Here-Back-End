@@ -212,14 +212,14 @@ export class MovieService{
       return data;
     };
 
-    public async rateMovieInDb({ movieId, userId,vote }:VoteMovieDTO):Promise<UpVotes>{
-          const findMovie = await  this.searchMovieIdInDB(Number(movieId));
+    public async rateMovieInDb(data:VoteMovieDTO):Promise<UpVotes>{
+          const findMovie = await  this.searchMovieIdInDB(Number(data.movieId));
 
           const newVote = await this.pr.upVotes.create({
             data:{
-              userId:userId,
-              movieId:movieId,
-              vote:vote,
+              userId:data.userId,
+              movieId:data.movieId,
+              vote:data.vote,
             },
           });
 
