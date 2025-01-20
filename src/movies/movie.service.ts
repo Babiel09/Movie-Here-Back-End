@@ -234,7 +234,9 @@ export class MovieService{
 
       };
 
-    public async findMoviesPerVote():Promise<Movies[]>{
+    public async findMoviesPerVote(page:number){
+      const pageSize:number = 10;
+      let currentPage:number = page;
        try{
          const findMovieForTheMoreVotes = await this.prisma.findMany({
            orderBy:{
@@ -244,10 +246,19 @@ export class MovieService{
            },
            include:{
              votes:true,
-           }
+           },
+           skip:(page - 1 ) * pageSize,
+           take:pageSize
          });
 
-         return findMovieForTheMoreVotes;
+         const totalMovies:number = await this.prisma.count();
+         const totalPages:number = Math.ceil(totalMovies / pageSize);
+
+         return {
+           findMovieForTheMoreVotes,
+           currentPage,
+           totalPages
+         };
        } catch (err){
         this.logger.error(`${err.message}`);
         throw new HttpException(`${err.message}`,err.status);
