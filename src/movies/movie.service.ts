@@ -213,6 +213,7 @@ export class MovieService{
     };
 
     public async rateMovieInDb(data:VoteMovieDTO):Promise<UpVotes>{
+      try{
           const findMovie = await  this.searchMovieIdInDB(Number(data.movieId));
 
           const newVote = await this.pr.upVotes.create({
@@ -224,6 +225,11 @@ export class MovieService{
           });
 
           return newVote;
+
+      } catch (err){
+        this.logger.error(`${err.message}`);
+        throw new HttpException(`${err.message}`,err.status);
+      };
 
       };
 
