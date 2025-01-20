@@ -87,7 +87,7 @@ export class MovieController{
     };
 
     @Post("/v1/rateMovie")
-    private async reateMovie(@Res()res:Response,@Body()data:VoteMovieDTO):Promise<Response>{
+    private async reateMovie(@Res()res:Response,@Body()data:{movieId:number,userId:number,vote:number}):Promise<Response>{
         try{
             const ratemovie = await this.movieService.rateMovieInDb(data);
 

@@ -212,14 +212,18 @@ export class MovieService{
       return data;
     };
 
-    public async rateMovieInDb(data:VoteMovieDTO):Promise<UpVotes>{
+    public async rateMovieInDb(data:{movieId:number,userId:number,vote:number}):Promise<UpVotes>{
       try{
           const findMovie = await  this.searchMovieIdInDB(Number(data.movieId));
+
+          this.logger.debug(findMovie);
+
+      //Sim, ele procura o filme no banco de dados
 
           const newVote = await this.pr.upVotes.create({
             data:{
               userId:data.userId,
-              movieId:data.movieId,
+              movieId:findMovie.realId,
               vote:data.vote,
             },
           });
