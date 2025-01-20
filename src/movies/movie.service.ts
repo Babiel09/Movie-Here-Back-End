@@ -29,11 +29,6 @@ export class MovieService{
           }
         });
 
-        if(!tryToFindMovie){
-          this.logger.error("We can't find the movie with this id in our DB!");
-          throw new HttpException(`We can't find the movie with this id (${id}) in our DB!`,400);
-        };
-
         return tryToFindMovie;
       } catch(error){
         this.logger.error(`${error}`);
@@ -41,14 +36,14 @@ export class MovieService{
       };
     };
 
-    private async injetMoveInDB(id:number):Promise<Movies>{
+    private async injectMovieInDB(id:number):Promise<Movies>{
       try{
 
-        const movieINDB = await this.searchMovieIdInDB(Number(id));
+        const findMovie = await this.searchMovieIdInDB(id);
 
-        if(movieINDB){
-          return movieINDB;
-        }
+        if(findMovie){
+          return findMovie;
+        };
 
         const newMovie = await this.prisma.create({
           data:{
@@ -63,7 +58,7 @@ export class MovieService{
         throw new HttpException(`${error.message}`,error.status);
       };
     };
-    
+
     public async movieAPITest(){
         const headers = {
             Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
@@ -99,7 +94,7 @@ export class MovieService{
           const jobMovies = await this.movieQueue.add(MOVIE_QUEUE,{
             jobPage:page
           });
-          
+
           this.logger.debug(`Processed job: ${JSON.stringify(jobMovies.data)}`);
 
           return data;
@@ -128,9 +123,8 @@ export class MovieService{
      });
      this.logger.debug(`Processed job: ${JSON.stringify(specifiedMovieJob.data)}`);
 
-     const addedNewMovieINDB = await this.injetMoveInDB(Number(id));
-    
-    this.logger.debug(addedNewMovieINDB.realId);
+       const addedNewMovieINDB = await this.injectMovieInDB(id);
+       this.logger.debug(addedNewMovieINDB.realId);
 
     return data;
     };
@@ -174,7 +168,7 @@ export class MovieService{
         })),
       );
 
-      
+
       this.logger.debug("Working in a new job in the Movie Queue");
       const ActorJob = await this.movieQueue.add(MOVIE_QUEUE,{
         jobName:fullName,
