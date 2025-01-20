@@ -234,4 +234,24 @@ export class MovieService{
 
       };
 
+    public async findMoviesPerVote():Promise<Movies[]>{
+       try{
+         const findMovieForTheMoreVotes = await this.prisma.findMany({
+           orderBy:{
+             votes:{
+               _count:'desc' // Ordena pela contagem de votos, decrescente
+             }
+           },
+           include:{
+             votes:true,
+           }
+         });
+
+         return findMovieForTheMoreVotes;
+       } catch (err){
+        this.logger.error(`${err.message}`);
+        throw new HttpException(`${err.message}`,err.status);
+      };
+    };
+
 };
