@@ -7,47 +7,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  password String
-  photo Bytes @default("")
-  description String @default("")
-  verified Boolean @default(false)
-  twoStetps Boolean @default(false)
-  createdAt DateTime @default(now())
-  digits Int[] @default([])
-  allUpVotes UpVotes[]  @relation("UserVotes")
-  allComments Comments[] @relation("UserComments") 
-  role Roles @default(User)
+model User {
+  id          Int        @id @default(autoincrement())
+  name        String
+  email       String     @unique
+  password    String
+  photo       Bytes      @default("")
+  description String     @default("")
+  verified    Boolean    @default(false)
+  twoStetps   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  digits      Int[]      @default([])
+  allUpVotes  UpVotes[]  @relation("UserVotes")
+  allComments Comments[] @relation("UserComments")
+  role        Roles      @default(User)
 }
 
-
-
 model Comments {
-  id      Int     @id @default(autoincrement())
-  user    User    @relation(fields: [userId], references: [id], name: "UserComments")
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id], name: "UserComments")
   userId  Int
-  movie   Movies  @relation(fields: [movieId], references: [id], name: "MovieComments")
+  movie   Movies @relation(fields: [movieId], references: [id], name: "MovieComments")
   movieId Int
   comment String
 }
 
 model UpVotes {
-  id      Int     @id @default(autoincrement())
-  user    User    @relation(fields: [userId], references: [id], name: "UserVotes")
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id], name: "UserVotes")
   userId  Int
-  movie   Movies  @relation(fields: [movieId], references: [id], name: "MovieVotes")
+  movie   Movies @relation(fields: [movieId], references: [realId], name: "MovieVotes")
   movieId Int
-  vote Float
+  vote    Float
 }
 
 model Movies {
-  id Int  @id @default(autoincrement())
-  realId    Int     @unique
-  comments  Comments[] @relation("MovieComments")
-  votes     UpVotes[]  @relation("MovieVotes")
+  id       Int        @id @default(autoincrement())
+  realId   Int        @unique
+  comments Comments[] @relation("MovieComments")
+  votes    UpVotes[]  @relation("MovieVotes")
 }
 
 enum Roles {
