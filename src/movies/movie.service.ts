@@ -8,7 +8,6 @@ import { error } from "console";
 import { PrismaService } from "prisma/prisma.service";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
-import { VoteMovieDTO } from './DTO/movie.rate.dto';
 
 @Injectable()
 export class MovieService{
@@ -216,9 +215,7 @@ export class MovieService{
       try{
           const findMovie = await  this.searchMovieIdInDB(Number(data.movieId));
 
-          this.logger.debug(findMovie);
 
-      //Sim, ele procura o filme no banco de dados
 
           const newVote = await this.pr.upVotes.create({
             data:{
