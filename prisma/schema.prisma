@@ -46,7 +46,7 @@ model Movies {
   realId   Int        @unique
   comments Comments[] @relation("MovieComments")
   votes    UpVotes[]  @relation("MovieVotes")
-  avarage  Float
+  avarage  Float?
 }
 
 enum Roles {

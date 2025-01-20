@@ -47,7 +47,8 @@ export class MovieService{
 
         const newMovie = await this.prisma.create({
           data:{
-            realId:Number(id)
+            realId:Number(id),
+            avarage:undefined,
           }
         });
 
@@ -209,8 +210,6 @@ export class MovieService{
       try{
           const findMovie = await  this.searchMovieIdInDB(Number(data.movieId));
 
-
-
           const newVote = await this.pr.upVotes.create({
             data:{
               userId:data.userId,
@@ -218,7 +217,7 @@ export class MovieService{
               vote:data.vote,
             },
           });
-
+          
           return newVote;
 
       } catch (err){
