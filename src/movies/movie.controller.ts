@@ -93,6 +93,11 @@ export class MovieController{
                 return res.status(400).json({server:"You need to put all the data elements in the body to continue!"});
             };
 
+            if(data.vote > 10){
+              this.logger.error("Your vote can have a maximum value of 10");
+              return res.status(400).json({server:"Your vote can have a maximum value of 10"});
+            };
+
             const ratemovie = await this.movieService.rateMovieInDb(data);
 
             return res.status(200).send(ratemovie);
