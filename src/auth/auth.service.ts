@@ -5,6 +5,8 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Queue } from "bull";
 import { PrismaService } from "prisma/prisma.service";
 import { AUTH_QUEUE } from "src/constants/constants";
+import { AuthPasswordDto } from './DTO/auth.password.dto';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class AuthService{
@@ -35,7 +37,19 @@ export class AuthService{
         };
     };
 
-    public async creatUserWithGooglePassword(id:number,newPassword:string):Promise<User>{
+    private async validateInstace(instance:object){
+        const instanceErrors = await validate(instance);
+
+        if(instanceErrors.length > 0){
+            this.logger.error('Validation failed!');
+            throw new HttpException(
+              `${instanceErrors.map((err) => Object.values(err.constraints)).join(', ')}`,
+              400,
+            );
+        };
+    };
+
+    public async creatUserWithGooglePassword(id:number,newPassword:AuthPasswordDto):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
 
