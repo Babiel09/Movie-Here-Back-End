@@ -80,7 +80,7 @@ export class AuthService{
         };
     };
 
-    public async changeUserPassword(newPassword:AuthService,id:number):Promise<User>{
+    public async changeUserPassword(newPassword:AuthPasswordDto,id:number):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
 
