@@ -11,6 +11,7 @@ import { UserGuard } from './guards/user.guard';
 import { HttpModule } from '@nestjs/axios';
 import { UserLoginDto } from './DTO/user.login.dto';
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
+import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
 
 
 @Module({
@@ -29,7 +30,15 @@ import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
             }),
     ],
     controllers:[UserController],
-    providers:[UserService,UserProcessor,UserGuard,UserController,UserLoginDto,UserCreateCommnetDto],
+    providers:[
+      UserService,
+      UserProcessor,
+      UserGuard,
+      UserController,
+      UserLoginDto,
+      UserCreateCommnetDto,
+      UserCreateDescriptionDto
+    ],
     exports:[UserService],
 })
 export class UserModule {};
