@@ -7,6 +7,7 @@ import { PrismaService } from "prisma/prisma.service";
 import { AUTH_QUEUE } from "src/constants/constants";
 import { AuthPasswordDto } from './DTO/auth.password.dto';
 import { validate } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService{
@@ -53,12 +54,14 @@ export class AuthService{
         try{
             const findUser = await this.findUser(Number(id));
 
+            const realNewPassword = plainToInstance(AuthPasswordDto,newPassword);
+
             const updateUserWithGooglePass = await this.prisma.update({
                 where:{
                     id:findUser.id,
                 },
                 data:{
-                    password:newPassword,
+                    password:realNewPassword.newPassword,
                 },
             });
 
@@ -77,16 +80,18 @@ export class AuthService{
         };
     };
 
-    public async changeUserPassword(newPassword:string,id:number):Promise<User>{
+    public async changeUserPassword(newPassword:AuthService,id:number):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
+
+            const realNewPassword = plainToInstance(AuthPasswordDto,newPassword);
 
             const passwordAtt = await this.prisma.update({
                 where:{
                     id:findUser.id
                 },
                 data:{
-                    password:newPassword,
+                    password:realNewPassword.newPassword,
                 },
             });
 
