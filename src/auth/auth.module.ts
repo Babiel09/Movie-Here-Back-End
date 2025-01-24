@@ -12,6 +12,7 @@ import { GoogleStrategy } from './google/auth.google.strategy';
 import { PrismaModule } from 'prisma/prisma.module';
 import { AuthService } from './auth.service';
 import { EmailModule } from 'src/email/email.module';
+import { AuthPasswordDto } from './DTO/auth.password.dto';
 
 
 @Module({
@@ -31,6 +32,14 @@ import { EmailModule } from 'src/email/email.module';
         }),
     ],
     controllers: [AuthController],
-    providers:[GoogleGuard,AuthGuard,AuthProcessor,AuthController,GoogleStrategy,AuthService],
+    providers:[
+      GoogleGuard,
+        AuthGuard,
+        AuthProcessor,
+        AuthController,
+        GoogleStrategy,
+        AuthService,
+        AuthPasswordDto
+    ],
 })
 export class AuthModule { };
