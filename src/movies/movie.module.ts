@@ -6,6 +6,7 @@ import { BullModule } from "@nestjs/bull";
 import { MOVIE_QUEUE } from "src/constants/constants";
 import { MovieProcessor } from "./processor/movies.processor";
 import { PrismaModule } from "prisma/prisma.module";
+import { RateMovieDTO } from './DTO/movie.rate.dto';
 
 
 @Module({
@@ -17,6 +18,6 @@ import { PrismaModule } from "prisma/prisma.module";
         }),
     ],
     controllers:[MovieController],
-    providers:[MovieService,MovieProcessor]
+    providers:[MovieService,MovieProcessor,RateMovieDTO]
 })
 export class MovieModule{};

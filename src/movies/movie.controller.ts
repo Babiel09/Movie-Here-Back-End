@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Logger, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { MovieService } from "./movie.service";
 import { Response } from "express";
+import { RateMovieDTO } from './DTO/movie.rate.dto';
 
 @Controller("movie")
 export class MovieController{
@@ -86,7 +87,7 @@ export class MovieController{
     };
 
     @Post("/v1/rateMovie")
-    private async rateMovie(@Res()res:Response,@Body()data:{movieId:number,userId:number,vote:number}):Promise<Response>{
+    private async rateMovie(@Res()res:Response,@Body()data:RateMovieDTO):Promise<Response>{
         try{
             if(!data){
                 this.logger.error(`You need to put all the data elements in the body to continue!`);

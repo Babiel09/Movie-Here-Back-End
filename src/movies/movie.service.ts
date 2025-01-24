@@ -8,6 +8,9 @@ import { error } from "console";
 import { PrismaService } from "prisma/prisma.service";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
+import { RateMovieDTO } from './DTO/movie.rate.dto';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class MovieService{
@@ -16,6 +19,7 @@ export class MovieService{
     constructor(
       private readonly httpService:HttpService,
       @InjectQueue(MOVIE_QUEUE) private readonly movieQueue,
+      private readonly rateMovieDto:RateMovieDTO,
       private readonly pr:PrismaService,
     ){
       this.prisma = pr.movies;
@@ -206,15 +210,24 @@ export class MovieService{
       return data;
     };
 
-    public async rateMovieInDb(data:{movieId:number,userId:number,vote:number}):Promise<UpVotes>{
+    public async rateMovieInDb(data:RateMovieDTO):Promise<UpVotes>{
       try{
-          const findMovie = await  this.searchMovieIdInDB(Number(data.movieId));
+          const realData = plainToInstance(RateMovieDTO,data);
+
+          const realDataError = await validate(realData);
+
+          if(realDataError.length > 0){
+            this.logger.error("Error to validate the data!");
+            throw new HttpException(`${realDataError.map(err => Object.values(err.constraints)).join(', ')}`,400);
+          };
+
+          const findMovie = await  this.searchMovieIdInDB(realData.movieId);
 
           const newVote = await this.pr.upVotes.create({
             data:{
-              userId:data.userId,
+              userId:realData.userId,
               movieId:findMovie.realId,
-              vote:data.vote,
+              vote:realData.vote,
             },
           });
           
