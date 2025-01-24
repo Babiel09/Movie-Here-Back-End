@@ -56,7 +56,7 @@ export class MovieController{
     };
 
     @Get("/v1/actor")
-    private async findUserByFullName(@Query("fullName")fullName:string,@Query("page")page:number,@Res()res:Response):Promise<Response>{
+    private async findUserByFullName(@Query("fullName")fullName:string, @Query("page")page:number, @Res()res:Response):Promise<Response>{
         try{
             if(!fullName){
                 this.logger.error(`Insert the full name to do a search!`);

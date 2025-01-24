@@ -10,6 +10,9 @@ import * as bcrypt from "bcrypt";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpService } from "@nestjs/axios";
 import { Axios, AxiosError } from "axios";
+import { UserLoginDto } from './DTO/user.login.dto';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 
 
 @Injectable()
@@ -77,11 +80,21 @@ export class UserService{
     };
 
 
-    public async Login(email:string):Promise<User>{
+    public async Login(data:UserLoginDto):Promise<User>{
+
+        const realEmail = plainToInstance(UserLoginDto,data);
+
+        const realEmailError = await validate(realEmail);
+
+        if(realEmailError.length > 0){
+          this.logger.error("Validation failed!");
+            throw new HttpException(`${realEmailError.map(err => Object.values(err.constraints)).join(', ')}`,400);
+        };
+
         try{
             const searchUserEmail = this.prisma.findUnique({
                 where:{
-                    email:email
+                    email:data.email
                 }
             });
 

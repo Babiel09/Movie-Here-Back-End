@@ -14,6 +14,7 @@ import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { AuthService } from "./auth.service";
 import { EmailService } from "src/email/email.service";
+import { UserLoginDto } from '../user/DTO/user.login.dto';
 
 @Controller("auth")
 export class AuthController {
@@ -29,7 +30,7 @@ export class AuthController {
     };
 
     @Post("/v2/login")
-    private async login(@Res() res: Response, @Body() data: { email: string, password: string }): Promise<Response> {
+    private async login(@Res() res: Response, @Body() data: UserLoginDto): Promise<Response> {
         try {
             if (!data.email) {
                 this.logger.error(`You need to pass the email!`);
@@ -41,7 +42,7 @@ export class AuthController {
                 return res.status(400).json({ server: `You need to pass the password!` });
             };
 
-            const findUserByEmail = await this.userService.Login(data.email);
+            const findUserByEmail = await this.userService.Login(data);
 
             if(findUserByEmail.twoStetps){
                 const sentEmail = await this.emailService.veriFyUserInLogin(findUserByEmail.email);
@@ -52,7 +53,7 @@ export class AuthController {
             const verifyPassword = await bcrypt.compare(data.password, findUserByEmail.password);
 
             if (!verifyPassword) {
-                this.logger.error(`The password doesn't matc!`);
+                this.logger.error(`The password doesn't match!`);
                 return res.status(401).json({ server: `Invalid credentials!` });
             };
 
@@ -215,7 +216,7 @@ export class AuthController {
 
             const digitArray = digits.split(",").map(Number);
 
-            const findUserByEmail = await this.userService.Login(email);
+            const findUserByEmail = await this.authservice.findUserByTheEmail(email);
             
             const isValidDigits = findUserByEmail.digits.length === digitArray.length &&
             findUserByEmail.digits.map((val, index) => val === digitArray[index]);

@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from 'src/email/email.module';
 import { UserGuard } from './guards/user.guard';
 import { HttpModule } from '@nestjs/axios';
+import { UserLoginDto } from './DTO/user.login.dto';
 
 
 @Module({
@@ -27,7 +28,7 @@ import { HttpModule } from '@nestjs/axios';
             }),
     ],
     controllers:[UserController],
-    providers:[UserService,UserProcessor,UserGuard,UserController],
+    providers:[UserService,UserProcessor,UserGuard,UserController,UserLoginDto],
     exports:[UserService],
 })
 export class UserModule {};
