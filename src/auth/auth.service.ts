@@ -56,6 +56,8 @@ export class AuthService{
 
             const realNewPassword = plainToInstance(AuthPasswordDto,newPassword);
 
+            await this.validateInstace(realNewPassword);
+
             const updateUserWithGooglePass = await this.prisma.update({
                 where:{
                     id:findUser.id,
@@ -85,6 +87,8 @@ export class AuthService{
             const findUser = await this.findUser(Number(id));
 
             const realNewPassword = plainToInstance(AuthPasswordDto,newPassword);
+
+            await this.validateInstace(realNewPassword);
 
             const passwordAtt = await this.prisma.update({
                 where:{
