@@ -15,6 +15,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { AuthService } from "./auth.service";
 import { EmailService } from "src/email/email.service";
 import { UserLoginDto } from '../user/DTO/user.login.dto';
+import { AuthPasswordDto } from './DTO/auth.password.dto';
 
 @Controller("auth")
 export class AuthController {
@@ -138,9 +139,12 @@ export class AuthController {
 
             const encryptedPassword = await bcrypt.hash(password, 12);
 
+            let newPasswordDTO = new AuthPasswordDto();
+            newPasswordDTO.newPassword = encryptedPassword;
+
             this.logger.debug(encryptedPassword);
 
-            await this.authservice.creatUserWithGooglePassword(Number(id), encryptedPassword);
+            await this.authservice.creatUserWithGooglePassword(Number(id), newPasswordDTO);
 
             return res.status(202).json({ server: "New password added with sucess!" });
 
@@ -175,7 +179,11 @@ export class AuthController {
 
             const encryptedPassword = await bcrypt.hash(password, 12);
 
-            await this.authservice.changeUserPassword(encryptedPassword, Number(id));
+
+            let newPasswordDTO = new AuthPasswordDto();
+            newPasswordDTO.newPassword = encryptedPassword;
+
+            await this.authservice.changeUserPassword(newPasswordDTO,Number(id));
 
             return res.status(202).json({ server: "Password sucefully changed!" });
 
@@ -197,7 +205,10 @@ export class AuthController {
 
             const encryptedPassword = await bcrypt.hash(password, 12);
 
-            await this.authservice.changeUserPassword(encryptedPassword, Number(id));
+            let newPasswordDTO = new AuthPasswordDto();
+            newPasswordDTO.newPassword = encryptedPassword;
+
+            await this.authservice.changeUserPassword(newPasswordDTO, Number(id));
 
             return res.status(202).json({ server: "Password sucefully changed!" });
         } catch (err) {
