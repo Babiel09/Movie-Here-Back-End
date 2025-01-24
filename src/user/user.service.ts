@@ -14,6 +14,7 @@ import { UserLoginDto } from './DTO/user.login.dto';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
+import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
 
 
 @Injectable()
@@ -26,6 +27,15 @@ export class UserService{
         private readonly httpService:HttpService,
     ){
         this.prisma = pr.user;
+    };
+
+    private async validateInstace(instance){
+        const realDataError = await validate(instance);
+
+        if(realDataError.length > 0){
+            this.logger.error("Validation failed!");
+            throw new HttpException(`${realDataError.map(err => Object.values(err.constraints)).join(', ')}`,400);
+        };
     };
 
     public async InsertUser(data:CreationUser):Promise<User>{
@@ -85,12 +95,7 @@ export class UserService{
 
         const realEmail = plainToInstance(UserLoginDto,data);
 
-        const realEmailError = await validate(realEmail);
-
-        if(realEmailError.length > 0){
-          this.logger.error("Validation failed!");
-            throw new HttpException(`${realEmailError.map(err => Object.values(err.constraints)).join(', ')}`,400);
-        };
+        await this.validateInstace(realEmail);
 
         try{
             const searchUserEmail = this.prisma.findUnique({
@@ -158,14 +163,25 @@ export class UserService{
         };
     };
 
-    public async UpdateDescription(id:number,description:string):Promise<User>{
+    public async CreateDescription(id:number, description:UserCreateDescriptionDto):Promise<User>{
+
+        const realDescription = plainToInstance(UserCreateDescriptionDto,description);
+
+        //  const realDataError = await validate(realComment);
+
+        if(realDataError.length > 0){
+            this.logger.error("Validation failed!");
+            throw new HttpException(`${realDataError.map(err => Object.values(err.constraints)).join(', ')}`,400);
+        };
+
+
         try{
             const tryToUpdate = await this.prisma.update({
                 where:{
                     id:id
                 },
                 data:{
-                    description:description
+                    description:realDescription.description
                 }
             });
 
