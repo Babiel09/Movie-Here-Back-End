@@ -1,21 +1,20 @@
-import { HttpException, Injectable, Logger } from "@nestjs/common";
-import { Comments, Movies, Prisma, Roles, User } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
-import { PrismaService } from "prisma/prisma.service";
-import { CreationUser } from "./DTO/user.dto";
-import { InjectQueue } from "@nestjs/bull";
-import { USER_QUEUE } from "src/constants/constants";
-import { Queue } from "bull";
-import * as bcrypt from "bcrypt";
+import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { Comments, Movies, Prisma, Roles, User } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { PrismaService } from 'prisma/prisma.service';
+import { CreationUser } from './DTO/user.dto';
+import { InjectQueue } from '@nestjs/bull';
+import { USER_QUEUE } from 'src/constants/constants';
+import { Queue } from 'bull';
+import * as bcrypt from 'bcrypt';
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
-import { HttpService } from "@nestjs/axios";
-import { Axios, AxiosError } from "axios";
+import { HttpService } from '@nestjs/axios';
+import { Axios, AxiosError } from 'axios';
 import { UserLoginDto } from './DTO/user.login.dto';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
-
 
 @Injectable()
 export class UserService {
@@ -284,4 +283,4 @@ export class UserService {
       throw new HttpException(`${err.message}`, err.status);
     }
   }
-};
+}
