@@ -10,6 +10,7 @@ import { EmailModule } from 'src/email/email.module';
 import { UserGuard } from './guards/user.guard';
 import { HttpModule } from '@nestjs/axios';
 import { UserLoginDto } from './DTO/user.login.dto';
+import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 
 
 @Module({
@@ -28,7 +29,7 @@ import { UserLoginDto } from './DTO/user.login.dto';
             }),
     ],
     controllers:[UserController],
-    providers:[UserService,UserProcessor,UserGuard,UserController,UserLoginDto],
+    providers:[UserService,UserProcessor,UserGuard,UserController,UserLoginDto,UserCreateCommnetDto],
     exports:[UserService],
 })
 export class UserModule {};

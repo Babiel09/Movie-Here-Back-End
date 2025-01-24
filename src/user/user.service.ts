@@ -13,6 +13,7 @@ import { Axios, AxiosError } from "axios";
 import { UserLoginDto } from './DTO/user.login.dto';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 
 
 @Injectable()
@@ -127,14 +128,23 @@ export class UserService{
         };
     };
 
-    public async CreateAComment(movieId:number,userComment:string,userId:number):Promise<Comments>{
-        try{
+    public async CreateAComment(movieId:number,userId:number,userComment:UserCreateCommnetDto):Promise<Comments>{
 
-            const movie = await this.findMovie(movieId);
+        const realComment = plainToInstance(UserCreateCommnetDto,userComment);
+
+        const realDataError = await validate(realComment);
+
+        if(realDataError.length > 0){
+            this.logger.error("Validation failed!");
+            throw new HttpException(`${realDataError.map(err => Object.values(err.constraints)).join(', ')}`,400);
+        };
+
+        try{
+            const movie = await this.findMovie(Number(movieId));
 
             const newComment = await this.pr.comments.create({
                 data:{
-                    comment:userComment,
+                    comment:realComment.userComment,
                     userId:userId,
                     movieId:movie.id,
                 },

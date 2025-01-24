@@ -12,6 +12,7 @@ import { json } from "stream/consumers";
 import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
+import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 
 
 @Injectable()
@@ -114,7 +115,11 @@ export class UserController{
     private async createComment(@Query("userId")userId:number,@Query("movieId")movieId:number,@Body("userComment")userComment:string,@Res()res:Response):Promise<Response>{
         try{
 
-           const createNewComment = await this.userService.CreateAComment(Number(movieId),userComment,Number(userId));
+            let userCommentWithDTO = new UserCreateCommnetDto();
+
+            userCommentWithDTO.userComment = userComment;
+
+           const createNewComment = await this.userService.CreateAComment(Number(movieId),Number(userId),userCommentWithDTO);
 
            return res.status(201).send(createNewComment);
 
