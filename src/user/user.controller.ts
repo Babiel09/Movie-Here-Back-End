@@ -13,6 +13,7 @@ import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
+import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
 
 
 @Injectable()
@@ -148,14 +149,18 @@ export class UserController{
     };
 
     @Patch("/v2/description/:id")
-    private async changeUserDescription(@Res()res:Response,@Body("description")description:string,@Param("id")id:number):Promise<Response>{
+    private async createUserDescription(@Res()res:Response,@Body("description")description:string,@Param("id")id:number):Promise<Response>{
         try{
-
             if(!description){
                 this.logger.error(`You need to input a description!`);
+                return res.status(400).json({server:"You need to input a description!"});
             };
 
-            const newDescription = await this.userService.UpdateDescription(Number(id),description);
+            let descriptionDTO = new UserCreateDescriptionDto();
+
+            descriptionDTO.description = description;
+
+            const newDescription = await this.userService.CreateDescription(Number(id),descriptionDTO);
 
             return res.status(202).send(newDescription);
 
