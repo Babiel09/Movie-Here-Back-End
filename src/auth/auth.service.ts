@@ -38,7 +38,7 @@ export class AuthService{
         };
     };
 
-    private async validateInstace(instance:object){
+    public async validateInstace(instance:object){
         const instanceErrors = await validate(instance);
 
         if(instanceErrors.length > 0){
@@ -50,20 +50,16 @@ export class AuthService{
         };
     };
 
-    public async creatUserWithGooglePassword(id:number,newPassword:AuthPasswordDto):Promise<User>{
+    public async creatUserWithGooglePassword(id:number,newPassword:string):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
-
-            const realNewPassword = plainToInstance(AuthPasswordDto,newPassword);
-
-            await this.validateInstace(realNewPassword);
 
             const updateUserWithGooglePass = await this.prisma.update({
                 where:{
                     id:findUser.id,
                 },
                 data:{
-                    password:realNewPassword.newPassword,
+                    password:newPassword,
                 },
             });
 
@@ -82,20 +78,16 @@ export class AuthService{
         };
     };
 
-    public async changeUserPassword(newPassword:AuthPasswordDto,id:number):Promise<User>{
+    public async changeUserPassword(newPassword:string,id:number):Promise<User>{
         try{
             const findUser = await this.findUser(Number(id));
-
-            const realNewPassword = plainToInstance(AuthPasswordDto,newPassword);
-
-            await this.validateInstace(realNewPassword);
 
             const passwordAtt = await this.prisma.update({
                 where:{
                     id:findUser.id
                 },
                 data:{
-                    password:realNewPassword.newPassword,
+                    password:newPassword,
                 },
             });
 
