@@ -5,9 +5,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Queue } from "bull";
 import { PrismaService } from "prisma/prisma.service";
 import { AUTH_QUEUE } from "src/constants/constants";
-import { AuthPasswordDto } from './DTO/auth.password.dto';
 import { validate } from 'class-validator';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService{

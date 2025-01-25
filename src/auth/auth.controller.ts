@@ -15,8 +15,6 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { AuthService } from "./auth.service";
 import { EmailService } from "src/email/email.service";
 import { UserLoginDto } from '../user/DTO/user.login.dto';
-import { AuthPasswordDto } from './DTO/auth.password.dto';
-import { plainToInstance } from 'class-transformer';
 
 @Controller("auth")
 export class AuthController {
