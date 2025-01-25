@@ -16,6 +16,7 @@ import { AuthService } from "./auth.service";
 import { EmailService } from "src/email/email.service";
 import { UserLoginDto } from '../user/DTO/user.login.dto';
 import { AuthPasswordDto } from './DTO/auth.password.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Controller("auth")
 export class AuthController {
@@ -139,12 +140,9 @@ export class AuthController {
 
             const encryptedPassword = await bcrypt.hash(password, 12);
 
-            let newPasswordDTO = new AuthPasswordDto();
-            newPasswordDTO.newPassword = encryptedPassword;
-
             this.logger.debug(encryptedPassword);
 
-            await this.authservice.creatUserWithGooglePassword(Number(id), newPasswordDTO);
+            await this.authservice.creatUserWithGooglePassword(Number(id), encryptedPassword);
 
             return res.status(202).json({ server: "New password added with sucess!" });
 
@@ -154,7 +152,7 @@ export class AuthController {
         };
     };
 
-    @Patch("/v4/changePassword/:id")
+    @Patch("/v4/changePassword/:id") //Feito
     private async changeUserPassword(@Param("id") id: number, @Body("newPassword") password: string, @Body("oldPassword") oldPassword: string, @Res() res: Response): Promise<Response> {
         try {
 
@@ -172,6 +170,7 @@ export class AuthController {
                 return res.status(401).json({ server: `Your old password is incorrect!` });
             };
 
+
             if (oldPassword === password) {
                 this.logger.error(`The old password can't be the new password, please insert a new password!`);
                 return res.status(401).json({ server: `The old password can't be the new password, please insert a new password!` });
@@ -179,11 +178,7 @@ export class AuthController {
 
             const encryptedPassword = await bcrypt.hash(password, 12);
 
-
-            let newPasswordDTO = new AuthPasswordDto();
-            newPasswordDTO.newPassword = encryptedPassword;
-
-            await this.authservice.changeUserPassword(newPasswordDTO,Number(id));
+            await this.authservice.changeUserPassword(encryptedPassword,Number(id));
 
             return res.status(202).json({ server: "Password sucefully changed!" });
 
@@ -205,10 +200,7 @@ export class AuthController {
 
             const encryptedPassword = await bcrypt.hash(password, 12);
 
-            let newPasswordDTO = new AuthPasswordDto();
-            newPasswordDTO.newPassword = encryptedPassword;
-
-            await this.authservice.changeUserPassword(newPasswordDTO, Number(id));
+            await this.authservice.changeUserPassword(encryptedPassword, Number(id));
 
             return res.status(202).json({ server: "Password sucefully changed!" });
         } catch (err) {
