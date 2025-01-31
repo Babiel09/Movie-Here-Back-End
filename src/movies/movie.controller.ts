@@ -44,6 +44,18 @@ export class MovieController{
         };
     };
 
+    @Get("/v1/genders")
+    private async showAllGenders(@Res()res:Response):Promise<Response>{
+        try{
+            const allGenders = await this.movieService.allGenders();
+
+            return res.status(200).send(allGenders);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
     @Get("/v1/companyImage/:id")
     private async findCompanyImage(@Res()res:Response,@Param("id")id:number):Promise<Response>{
         try{
