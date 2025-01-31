@@ -221,11 +221,31 @@ export class UserService {
     try {
       const findUserByid = await this.SelectOne(Number(id));
 
+      if(!findUserByid){
+        this.logger.error("User not found");
+        throw new HttpException("User not found",404);
+      }
+
+      this.logger.debug(findUserByid.id)
+
+      const deleteUserComments = await this.pr.comments.deleteMany({
+        where:{
+          userId: Number(findUserByid.id),
+        }
+      });
+
+      const deleteUserVotes = await this.pr.upVotes.deleteMany({
+        where:{
+          userId: Number(findUserByid.id),
+        }
+      });
+
       const deleteUser = await this.prisma.delete({
         where: {
-          id: findUserByid.id,
+          id: Number(findUserByid.id),
         },
       });
+
 
       return deleteUser;
     } catch (err) {
