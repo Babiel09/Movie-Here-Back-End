@@ -102,6 +102,26 @@ export class MovieService{
       return data;
     };
 
+    public async findMovieByName(movieName:string,page:number){
+      const {data} = await firstValueFrom(
+        this.httpService.get<any>(`https://api.themoviedb.org/3/search/movie?query=${movieName}&include_adult=false&language=en-US&page=${page}`,{
+          headers:{
+            accept:"application/json",
+            Authorization:
+            `Bearer ${process.env.TMDB_TOKEN}`,
+          }
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(`${error}`);
+            throw new HttpException(`${error.message}`,error.status);
+          }),
+        ),
+      );
+
+      return data;
+    };
+
     public async getAllMovies(page:number):Promise<Axios[]>{
 
         const { data } = await firstValueFrom(
