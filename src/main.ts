@@ -13,6 +13,8 @@ async function bootstrap() {
     })
   );
 
+  app.enableCors();
+
   const port = process.env.PORT ?? 6785;
 
   await app.listen(port);
