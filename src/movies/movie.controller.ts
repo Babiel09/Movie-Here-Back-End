@@ -72,6 +72,18 @@ export class MovieController{
         };
     };
 
+    @Get("/v1/movieId/:id")
+    private async findMOvieImages(@Res()res:Response,@Param("id")id:number):Promise<Response>{
+        try{
+            const allMovieImages = await this.movieService.findMovieImage(Number(id));
+            
+            return res.status(200).send(allMovieImages);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
     @Get("/v1/companyImage/:id")
     private async findCompanyImage(@Res()res:Response,@Param("id")id:number):Promise<Response>{
         try{
