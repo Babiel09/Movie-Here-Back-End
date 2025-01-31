@@ -105,6 +105,25 @@ export class MovieService{
           return data;
     };
 
+    public async allGenders():Promise<Axios>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any>("https://api.themoviedb.org/3/genre/movie/list?language=en",{
+          headers:{
+            accept:"application/json",
+            Authorization:`Bearer ${process.env.TMDB_TOKEN}`
+          }
+        })
+        .pipe(
+          catchError((error:AxiosError)=>{
+            this.logger.error(`${error}`);
+            throw new HttpException(`${error.message}`,error.status);
+          }),
+        ),
+      );
+
+      return data;
+    };
+
 
     public async getMovieForId(id:number):Promise<Axios>{
      const {data}  = await firstValueFrom(
