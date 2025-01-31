@@ -24,7 +24,7 @@ export class MovieService{
       this.prisma = pr.movies;
     };
 
-    private async findImage(imageUrl:string):Promise<Axios>{
+    public async findImage(imageUrl:string):Promise<Axios>{
       const {data} = await firstValueFrom(
         this.httpService.get<any>(`http://52.33.176.184/tmdbbd/${imageUrl}`)
         .pipe(
