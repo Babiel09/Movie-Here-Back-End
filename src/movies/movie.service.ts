@@ -24,9 +24,9 @@ export class MovieService{
       this.prisma = pr.movies;
     };
 
-    public async findImage(imageUrl:string):Promise<Axios>{
+    public async findImage(imageUrl:string):Promise<ArrayBuffer>{
       const {data} = await firstValueFrom(
-        this.httpService.get<any>(`http://52.33.176.184/tmdbbd/${imageUrl}`)
+        this.httpService.get<ArrayBuffer>(`http://52.33.176.184/tmdbbd/${imageUrl}`,{responseType:"arraybuffer"})
         .pipe(
           catchError((error: AxiosError) => {
             this.logger.error(`${error}`);
