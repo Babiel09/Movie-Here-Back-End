@@ -89,6 +89,19 @@ export class MovieService{
         );
     };
 
+    public async findMovieImage(movieId:number):Promise<Axios>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any>(`https://api.themoviedb.org/3/movie/${movieId}/images`,{
+          headers:{
+            accept:"application/json",
+            Authorization:`Bearer ${process.env.TMDB_TOKEN}`,
+          },
+        })
+      );
+
+      return data;
+    };
+
     public async getAllMovies(page:number):Promise<Axios[]>{
 
         const { data } = await firstValueFrom(
