@@ -4,7 +4,6 @@ import { HttpException, Injectable, Logger } from "@nestjs/common";
 import { Movies, Prisma, UpVotes } from '@prisma/client';
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Axios, AxiosError } from "axios";
-import { error } from "console";
 import { PrismaService } from "prisma/prisma.service";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { MOVIE_QUEUE } from "src/constants/constants";
@@ -23,6 +22,20 @@ export class MovieService{
       private readonly pr:PrismaService,
     ){
       this.prisma = pr.movies;
+    };
+
+    private async findImage(imageUrl:string):Promise<Axios>{
+      const {data} = await firstValueFrom(
+        this.httpService.get<any>(`http://52.33.176.184/tmdbbd/${imageUrl}`)
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(`${error}`);
+            throw new HttpException(`${error.message}`,error.status);
+          }),
+        ),
+      );
+
+      return data;
     };
 
     private async searchMovieIdInDB(id:number):Promise<Movies | null>{
