@@ -95,6 +95,28 @@ export class MovieController{
         };
     };
 
+    @Get("/v1/findMovieByName")
+    private async findMovieByName(@Query("movieName")movieName:string,@Query("page")page:number,@Res()res:Response):Promise<Response>{
+        if(!movieName){
+            this.logger.error("You need to pass the movieName!");
+            return res.status(400).json({server:"You need to pass the page!"});
+        };
+        
+        if(!page){
+            this.logger.error("You need to pass the page!");
+            return res.status(400).json({server:"You need to pass the page!"});
+        };
+        
+        try{
+            const moviesWIthNameRelated = await this.movieService.findMovieByName(movieName,page);
+
+            return res.status(200).send(moviesWIthNameRelated);
+        }catch(err){
+            this.logger.error(`${err.message}`);
+            return res.status(err.status).json({server:`${err.message}`});
+        };
+    };
+
     @Get("/v1/actor")
     private async findUserByFullName(@Query("fullName")fullName:string, @Query("page")page:number, @Res()res:Response):Promise<Response>{
         try{
