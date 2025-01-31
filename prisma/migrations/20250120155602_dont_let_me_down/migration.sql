@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Movies" ALTER COLUMN "avarage" DROP NOT NULL,
+ALTER COLUMN "avarage" DROP DEFAULT;
