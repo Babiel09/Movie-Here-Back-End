@@ -58,10 +58,14 @@ export class MovieController{
 
     @Get("/v1/image")
     private async showTheImages(@Res()res:Response,@Query("imageURL")imageURL:string):Promise<Response>{
-        try{
-            const imageFound = await this.movieService.findImage(imageURL);
+        try{ 
+            let arrayBuffer = await this.movieService.findImage(imageURL);
+            
+            res.setHeader("Content-Type", "image/jpeg");
 
-            res.status(200).send(imageFound);
+            const realImage = Buffer.from(arrayBuffer);
+
+            res.status(200).send(realImage);
         }catch(err){
             this.logger.error(`${err.message}`);
             return res.status(err.status).json({server:`${err.message}`});
