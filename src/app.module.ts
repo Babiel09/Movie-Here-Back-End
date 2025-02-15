@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MovieModule } from './movies/movie.module';
 import { EmailModule } from './email/email.module';
+import { RedisModule } from './redis/redis.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { EmailModule } from './email/email.module';
     }),
     UserModule,
     AuthModule,
+    RedisModule,
   ],
   controllers: [],
   providers: [],
