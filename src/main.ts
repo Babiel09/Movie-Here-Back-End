@@ -19,6 +19,6 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  logger.warn(`API i srunning in http://localhost:${port}`);
+  logger.warn(`API is running in http://localhost:${port}`);
 }
 bootstrap();
