@@ -13,6 +13,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { AuthService } from './auth.service';
 import { EmailModule } from 'src/email/email.module';
 import { UserService } from 'src/user/user.service';
+import { AppService } from 'src/app.service';
 
 
 @Module({
@@ -33,7 +34,8 @@ import { UserService } from 'src/user/user.service';
     ],
     controllers: [AuthController],
     providers:[
-      GoogleGuard,
+        AppService,
+        GoogleGuard,
         AuthGuard,
         AuthProcessor,
         AuthController,
