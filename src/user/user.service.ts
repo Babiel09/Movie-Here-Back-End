@@ -4,7 +4,7 @@ import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreationUser } from './DTO/user.dto';
 import { InjectQueue } from '@nestjs/bull';
-import { USER_QUEUE } from 'src/constants/constants';
+import { USER_CACHE_KEY, USER_QUEUE } from 'src/constants/constants';
 import { Queue } from 'bull';
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
@@ -16,6 +16,7 @@ import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
 import { Response } from 'express';
 import { AuthController } from 'src/auth/auth.controller';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class UserService {
@@ -24,7 +25,8 @@ export class UserService {
   constructor(
     private readonly pr: PrismaService,
     @InjectQueue(USER_QUEUE) private readonly userQueue: Queue,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly redisService:RedisService
   ) {
     this.prisma = pr.user;
   }
@@ -70,9 +72,30 @@ export class UserService {
 
   public async SelectAll(): Promise<User[]> {
     try {
-      const tryToGetAllUsers = await this.prisma.findMany();
 
-      return tryToGetAllUsers;
+      const allUsersInCache = await this.redisService.get(USER_CACHE_KEY);
+
+      if(!allUsersInCache){
+
+        const tryToGetAllUsers = await this.prisma.findMany();
+
+        const setUserInCache = await this.redisService.set(
+          USER_CACHE_KEY,
+          JSON.stringify(allUsersInCache),
+          "EX", 
+          300
+        );
+
+        if(!setUserInCache){
+          this.logger.error("Error to set all users in the cache!");
+          throw new HttpException("Error to set all users in the cache!s",400)
+        };
+  
+        return tryToGetAllUsers;
+      };
+
+      return JSON.parse(allUsersInCache);
+
     } catch (err) {
       this.logger.error(`${err.message}`);
       throw new HttpException(`${err.message}`, err.status);
