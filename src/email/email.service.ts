@@ -418,28 +418,36 @@ export class EmailService{
             const tryToSendEmailWithDigitis  = await this.mailerService.sendMail({
                 to:userEmail,
                 from:process.env.GMAIL_USER,
-                subject:"Efetuar Login",
-                text:"Código de login!",
+                subject:"Do Login",
+                text:"Login code!",
                 html:`
 
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
-        </div>
-            
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Aqui está o código de login:
-            </p>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <h2 style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px;">
-                   ${realDigits}
-                </h2>
-            </div>
+     <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(to bottom, #1a1a1a, #000000); padding: 20px; font-family: Arial, sans-serif;">
+    <!-- Header -->
+    <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
+    </div>
+    
+    <!-- Main Content -->
+    <div style="margin: 20px; padding: 30px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; text-align: center;">
+        <p style="font-size: 24px; color: #ffffff; margin-bottom: 25px; font-family: Arial, sans-serif;">
+            Here is your login code:
+        </p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <h2 style="background-color: #ef4444; color: #ffffff; padding: 20px 40px; display: inline-block; border-radius: 9999px; font-size: 32px; margin: 0; font-weight: bold;">
+                ${realDigits}
+            </h2>
         </div>
     </div>
+
+    <!-- Footer -->
+    <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+        <p style="color: #888888; margin: 0; font-size: 14px;">
+            © 2025 Movie Here. All rights reserved.
+        </p>
+    </div>
+</div>
                 `
         });
 
@@ -448,28 +456,36 @@ export class EmailService{
         const emailJobTwoStepsVerification = await this.emailQueue.add(EMAIL_QUEUE,{
            jobTo:userEmail,
            jobFrom:process.env.GMAIL_USER,
-           jobSubject:"Efetuar Login",
-           jobText:"Código de login!",
+           jobSubject:"Do Login",
+           jobText:"Login code!",
            jobHtml:`
-  
-     <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
 
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
-        </div>
-            
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Aqui está o código de login:
-            </p>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <h2 style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px;">
-                   ${realDigits}
-                </h2>
-            </div>
-        </div>
-    </div>
+<div style="max-width: 600px; margin: 0 auto; background: linear-gradient(to bottom, #1a1a1a, #000000); padding: 20px; font-family: Arial, sans-serif;">
+<!-- Header -->
+<div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+   <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
+</div>
+
+<!-- Main Content -->
+<div style="margin: 20px; padding: 30px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; text-align: center;">
+   <p style="font-size: 24px; color: #ffffff; margin-bottom: 25px; font-family: Arial, sans-serif;">
+       Here is your login code:
+   </p>
+   
+   <div style="text-align: center; margin: 30px 0;">
+       <h2 style="background-color: #ef4444; color: #ffffff; padding: 20px 40px; display: inline-block; border-radius: 9999px; font-size: 32px; margin: 0; font-weight: bold;">
+           ${realDigits}
+       </h2>
+   </div>
+</div>
+
+<!-- Footer -->
+<div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+   <p style="color: #888888; margin: 0; font-size: 14px;">
+       © 2025 Movie Here. All rights reserved.
+   </p>
+</div>
+</div>
            `
         });
 
@@ -502,23 +518,30 @@ export class EmailService{
             const tryToSendEmailWithConfirm  = await this.mailerService.sendMail({
                 to:userEmail,
                 from:process.env.GMAIL_USER,
-                subject:"Efetuar Login",
-                text:"Login confirmado!",
+                subject:"Login",
+                text:"Login confirmed!",
                 html:`
 
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
-        </div>
-            
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Login confirmado!
-            </p>
-            </div>
-        </div>
+    <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(to bottom, #1a1a1a, #000000); padding: 20px; font-family: Arial, sans-serif;">
+    <!-- Header -->
+    <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
     </div>
+    
+    <!-- Main Content -->
+    <div style="margin: 20px; padding: 30px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; text-align: center;">
+        <p style="font-size: 24px; color: #ffffff; margin-bottom: 25px; font-family: Arial, sans-serif;">
+            Login Confirmed!
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+        <p style="color: #888888; margin: 0; font-size: 14px;">
+            © 2025 Movie Here. All rights reserved.
+        </p>
+    </div>
+</div>
                 `
         });
 
@@ -527,23 +550,30 @@ export class EmailService{
         const emailJobTwoStepsVerificationCode = await this.emailQueue.add(EMAIL_QUEUE,{
            jobTo:userEmail,
            jobFrom:process.env.GMAIL_USER,
-           jobSubject:"Efetuar Login",
-           jobText:"Login confirmado",
+           jobSubject:"Login",
+           jobText:"Login confirmed!",
            jobHtml:`
-  
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
 
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
-        </div>
-            
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Login confirmado!
-            </p>
-            </div>
-        </div>
-    </div>
+<div style="max-width: 600px; margin: 0 auto; background: linear-gradient(to bottom, #1a1a1a, #000000); padding: 20px; font-family: Arial, sans-serif;">
+<!-- Header -->
+<div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+   <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
+</div>
+
+<!-- Main Content -->
+<div style="margin: 20px; padding: 30px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; text-align: center;">
+   <p style="font-size: 24px; color: #ffffff; margin-bottom: 25px; font-family: Arial, sans-serif;">
+       Login Confirmed!
+   </p>
+</div>
+
+<!-- Footer -->
+<div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+   <p style="color: #888888; margin: 0; font-size: 14px;">
+       © 2025 Movie Here. All rights reserved.
+   </p>
+</div>
+</div>
            `
         });
 
