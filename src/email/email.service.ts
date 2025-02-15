@@ -21,20 +21,37 @@ export class EmailService{
             const tryToSendEmail = await this.mailerService.sendMail({
                 to:email,
                 from:process.env.GMAIL_USER,
-                subject:"Verificação da Conta",
-                text:"Sua conta está verificada agora você pode voltar para o site!",
+                subject:"Account verified",
+                text:"Your Account is now verified, you can come back to our website!",
                 html:`
 
-        <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
+       <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
         </div>
     
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Sua conta está verificada agora você pode voltar para o site!
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                    <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">Your Account is now verified, you can come back to our website!</h3>
+                </div>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Back to Website</a>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
             </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
             </div>
         </div>
     </div>
@@ -46,19 +63,36 @@ export class EmailService{
             const emailJob = await this.emailQueue.add(EMAIL_QUEUE,{
                jobTo:email,
                jobFrom:process.env.GMAIL_USER,
-               jobSubject:"Verificação da Conta",
-               jobText:"Sua conta está verificada agora você pode voltar para o site!",
+               jobSubject:"Account verified",
+               jobText:"Your Account is now verified, you can come back to our website!",
                jobHtml:`
-        <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
         </div>
     
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Sua conta está verificada agora você pode voltar para o site!
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                    <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">Your Account is now verified, you can come back to our website!</h3>
+                </div>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Back to Website</a>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
             </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
             </div>
         </div>
     </div>
