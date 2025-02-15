@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Injectable, Logger, Param, Patch, Post, Query, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
-import * as bcrypt from "bcrypt";
 import { CreationUser } from "./DTO/user.dto";
 import { Response } from "express";
 import { PrismaService } from "prisma/prisma.service";
@@ -8,12 +7,12 @@ import { Prisma, Roles } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { EmailService } from "src/email/email.service";
 import { UserGuard } from "./guards/user.guard";
-import { json } from "stream/consumers";
 import { InjectQueue } from "@nestjs/bull";
 import { USER_QUEUE } from "src/constants/constants";
 import { Queue } from "bull";
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
+import { AppService } from "src/app.service";
 
 
 @Injectable()
@@ -21,7 +20,13 @@ import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
 export class UserController{
     private readonly logger = new Logger(UserController.name);
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
-    constructor(private readonly userService:UserService, private readonly pr:PrismaService,private readonly emailService:EmailService,@InjectQueue(USER_QUEUE)private readonly userQueue:Queue){
+    constructor(
+        private readonly userService:UserService, 
+        private readonly pr:PrismaService,
+        private readonly emailService:EmailService,
+        @InjectQueue(USER_QUEUE)private readonly userQueue:Queue,
+        private readonly appService:AppService
+    ){
         this.prisma = pr.user;
     };
 
@@ -30,7 +35,7 @@ export class UserController{
         try{
             const newUser = await this.userService.InsertUser(data);
 
-            const senhaNova = await bcrypt.hash(newUser.password,12)
+            const senhaNova = await this.appService.hashRandomSalt(newUser.password);
 
             const realNewUser = await this.prisma.update({
                 where:{
