@@ -12,10 +12,12 @@ import { HttpModule } from '@nestjs/axios';
 import { UserLoginDto } from './DTO/user.login.dto';
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
+import { RedisModule } from 'src/redis/redis.module';
 
 
 @Module({
     imports:[
+        RedisModule,
         PrismaModule,
         HttpModule,
         BullModule.registerQueue({
