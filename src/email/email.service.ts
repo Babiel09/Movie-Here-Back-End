@@ -113,25 +113,37 @@ export class EmailService{
             const tryToSendEmailForTheUser  = await this.mailerService.sendMail({
                 to:userEmail,
                 from:process.env.GMAIL_USER,
-                subject:"Verificar sua Conta",
-                text:"Clique no botão abaixo para verificar sua conta em nosso website!",
+                subject:"Verify your account",
+                text:"Click in the button behold to verify your account in our website!",
                 html:`
 
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
+       <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
         </div>
     
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Clique no botão abaixo para verificar sua conta em nosso website!
-            </p>
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                    <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">Click in the button behold to verify your account in our website!</h3>
+                </div>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Verify</a>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
-                    Verificar
-                </a>
+        </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
+            </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
             </div>
         </div>
     </div>
@@ -144,24 +156,36 @@ export class EmailService{
           const emailJobVerify = await this.emailQueue.add(EMAIL_QUEUE,{
              jobTo:userEmail,
              jobFrom:process.env.GMAIL_USER,
-             jobSubject:"Verificar sua Conta",
-             jobText:"Clique no botão abaixo para verificar sua conta em nosso website!",
+             jobSubject:"Verify your account",
+             jobText:"Click in the button behold to verify your account in our website!",
              jobHtml:`
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
+       <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
         </div>
     
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Clique no botão abaixo para verificar sua conta em nosso website!
-            </p>
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                   <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">Click in the button behold to verify your account in our website!</h3>
+                </div>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Verify</a>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
-                    Verificar
-                </a>
+        </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
+            </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
             </div>
         </div>
     </div>
@@ -186,24 +210,36 @@ export class EmailService{
                     text:"Clique no botão abaixo para trocar sua senha em nosso website!",
                     html:`
 
-          <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-            <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-                <h1>Movie Here</h1>
-            </div>
-                
-            <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-                <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                    Clique no botão abaixo para trocar sua senha em nosso website!
-                </p>
+         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
+        </div>
+    
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                    <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">Click in the button behold to change your password in our website!</h3>
                 </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
-                        Trocar Senha
-                    </a>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Change Password</a>
                 </div>
             </div>
         </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
+            </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
                     `
             });
 
@@ -213,28 +249,40 @@ export class EmailService{
           const emailJobPassword = await this.emailQueue.add(EMAIL_QUEUE,{
              jobTo:userEmail,
              jobFrom:process.env.GMAIL_USER,
-             jobSubject:"Trocar Senha",
-             jobText:"Clique no botão abaixo para trocar sua senha em nosso website!",
+             jobSubject:"Change Password",
+             jobText:"Click in the button behold to change your password in our website!",
              jobHtml:`
     
-          <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-            <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-                <h1>Movie Here</h1>
-            </div>
-                
-            <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-                <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                    Clique no botão abaixo para trocar sua senha em nosso website!
-                </p>
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
+        </div>
+    
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                    <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">Click in the button behold to change your password in our website!</h3>
                 </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
-                        Trocar Senha
-                    </a>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Change Password</a>
                 </div>
             </div>
         </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
+            </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
              `
           });
 
@@ -253,25 +301,37 @@ export class EmailService{
             const tryToSendEmailChangePassword  = await this.mailerService.sendMail({
                 to:userEmail,
                 from:process.env.GMAIL_USER,
-                subject:"Recuperação de senha",
-                text:"Recuperar senha da sua conta.",
+                subject:"Rescue your password",
+                text:"If you wanna rescue your password click in the button below!",
                 html:`
 
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
-
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
+       <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+        <!-- Header -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
         </div>
-            
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Por favor, caso queira recuperar sua senha, por favor acesse o link do botão abaixo.
-            </p>
+    
+        <!-- Main Content -->
+        <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+            <div style="margin-top: 30px;">
+                <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+                    <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">If you wanna rescue your password click in the button below!</h3>
+                </div>
+                
+                <div style="text-align: center; margin: 35px 0;">
+                    <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Rescue Password</a>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
-                    Recuperar Senha
-                </a>
+        </div>
+    
+        <!-- Footer -->
+        <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+            <p style="color: #888888; margin: 0; font-size: 14px;">
+                © 2025 Movie Here. Todos os direitos reservados.
+            </p>
+            <div style="margin-top: 15px;">
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+                <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
             </div>
         </div>
     </div>
@@ -283,29 +343,40 @@ export class EmailService{
         const emailJobRecoverPassword = await this.emailQueue.add(EMAIL_QUEUE,{
            jobTo:userEmail,
            jobFrom:process.env.GMAIL_USER,
-           jobSubject:"Recuperação de senha",
-           jobText:"Recuperar senha da sua conta.",
+           jobSubject:"Rescue your password",
+           jobText:"If you wanna rescue your password click in the button below!",
            jobHtml:`
-  
-       
-      <div style="background: linear-gradient(to right, #AD8CEA, #50DFB2); padding: 10px;">
 
-        <div style="background: linear-gradient(to right, #1A2980, #26DDCE); color: white; padding: 20px; text-align: center; font-family: Arial, sans-serif;">
-            <h1>Movie Here</h1>
-        </div>
-            
-        <div style="margin: 20px; padding: 20px; border: 2px solid blue; border-radius: 10px; display: flex; justify-content: center;">
-            <p style="font-size: 24px; color: white; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-                Por favor, caso queira recuperar sua senha, por favor acesse o link do botão abaixo.
-            </p>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="#" style="background: linear-gradient(to right, #6A11CB, #2575FC); color: white; padding: 10px 30px; text-decoration: none; border-radius: 10px; font-size: 16px;">
-                    Recuperar Senha
-                </a>
-            </div>
-        </div>
-    </div>
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(to bottom, #1a1a1a, #000000); color: #ffffff; font-family: Arial, sans-serif;">
+   <!-- Header -->
+   <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">Movie Here</h1>
+   </div>
+
+   <!-- Main Content -->
+   <div style="padding: 30px 20px; background: rgba(31, 31, 31, 0.3); border-radius: 12px; margin-bottom: 20px;">
+       <div style="margin-top: 30px;">
+           <div style="border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(31, 31, 31, 0.5); padding: 25px; margin-bottom: 25px; border-radius: 8px;">
+               <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 0;">If you wanna rescue your password click in the button below!</h3>
+           </div>
+           
+           <div style="text-align: center; margin: 35px 0;">
+               <a href="#" style="background-color: #ef4444; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 9999px; font-weight: bold; display: inline-block;">Rescue Password</a>
+           </div>
+       </div>
+   </div>
+
+   <!-- Footer -->
+   <div style="background: rgba(31, 31, 31, 0.5); padding: 25px; text-align: center; border-radius: 12px;">
+       <p style="color: #888888; margin: 0; font-size: 14px;">
+           © 2025 Movie Here. Todos os direitos reservados.
+       </p>
+       <div style="margin-top: 15px;">
+           <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Contact</a>
+           <a href="#" style="color: #ef4444; text-decoration: none; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
+       </div>
+   </div>
+</div>
            `
         });
 
