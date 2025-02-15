@@ -15,6 +15,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { AuthService } from "./auth.service";
 import { EmailService } from "src/email/email.service";
 import { UserLoginDto } from '../user/DTO/user.login.dto';
+import { AppService } from "src/app.service";
 
 @Controller("auth")
 export class AuthController {
@@ -24,7 +25,8 @@ export class AuthController {
         private readonly userService: UserService, private readonly jwtService: JwtService,
         @InjectQueue(AUTH_QUEUE) private readonly authQueue: Queue, private readonly pr: PrismaService,
         private readonly authservice: AuthService,
-        private readonly emailService: EmailService
+        private readonly emailService: EmailService,
+        private readonly appService:AppService
     ) {
         this.prisma = pr.user;
     };
@@ -136,7 +138,7 @@ export class AuthController {
                 return res.status(401).json({ server: "You need to insert the password!" });
             };
 
-            const encryptedPassword = await bcrypt.hash(password, 12);
+            const encryptedPassword = await this.appService.hashRandomSalt(password);
 
             this.logger.debug(encryptedPassword);
 
@@ -174,7 +176,7 @@ export class AuthController {
                 return res.status(401).json({ server: `The old password can't be the new password, please insert a new password!` });
             };
 
-            const encryptedPassword = await bcrypt.hash(password, 12);
+            const encryptedPassword = await this.appService.hashRandomSalt(password);
 
             await this.authservice.changeUserPassword(encryptedPassword,Number(id));
 
@@ -196,7 +198,7 @@ export class AuthController {
 
             const userToChangeThePassWord = await this.userService.SelectOne(Number(id));
 
-            const encryptedPassword = await bcrypt.hash(password, 12);
+            const encryptedPassword = await this.appService.hashRandomSalt(password);
 
             await this.authservice.changeUserPassword(encryptedPassword, Number(id));
 
