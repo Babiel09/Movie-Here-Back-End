@@ -86,7 +86,7 @@ export class UserService {
 
         if(!setUserInCache){
           this.logger.error("Error to set all users in the cache!");
-          throw new HttpException("Error to set all users in the cache!s",400)
+          throw new HttpException("Error to set all users in the caches!",400)
         };
   
         return tryToGetAllUsers;
@@ -121,7 +121,7 @@ export class UserService {
 
         if(!setUserToCahge){
           this.logger.error("Error to set all users in the cache!");
-          throw new HttpException("Error to set all users in the cache!s",400)
+          throw new HttpException("Error to set one user in the cache!",400)
         };
 
         return tryToFindUser;
