@@ -14,8 +14,6 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
-import { Response } from 'express';
-import { AuthController } from 'src/auth/auth.controller';
 import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
@@ -116,6 +114,10 @@ export class UserService {
       throw new HttpException(`${err.message}`, err.status);
     }
   }
+
+  public async hashRandomSalt(){
+
+  };
 
   public async Login(data: UserLoginDto): Promise<User> {
     const realEmail = plainToInstance(UserLoginDto, data);
