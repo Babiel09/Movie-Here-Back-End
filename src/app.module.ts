@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { MovieModule } from './movies/movie.module';
 import { EmailModule } from './email/email.module';
 import { RedisModule } from './redis/redis.module';
+import { AppService } from './app.service';
 
 
 @Module({
@@ -24,6 +25,7 @@ import { RedisModule } from './redis/redis.module';
     RedisModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AppService],
+  exports:[AppService]
 })
 export class AppModule {};
