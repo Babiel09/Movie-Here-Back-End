@@ -112,14 +112,14 @@ export class UserService {
           },
         });
   
-        const setUserToCahge = await this.redisService.set(
+        const setUserToCache = await this.redisService.set(
           "user-one",
           JSON.stringify(tryToFindUser),
           "EX",
           180
         );
 
-        if(!setUserToCahge){
+        if(!setUserToCache){
           this.logger.error("Error to set all users in the cache!");
           throw new HttpException("Error to set one user in the cache!",400)
         };
@@ -134,10 +134,6 @@ export class UserService {
       throw new HttpException(`${err.message}`, err.status);
     }
   }
-
-  public async hashRandomSalt(){
-
-  };
 
   public async Login(data: UserLoginDto): Promise<User> {
     const realEmail = plainToInstance(UserLoginDto, data);
@@ -167,13 +163,34 @@ export class UserService {
 
   private async findMovie(movieId: number): Promise<Movies> {
     try {
-      const tryToFindMovie = await this.pr.movies.findUnique({
-        where: {
-          realId: movieId,
-        },
-      });
 
-      return tryToFindMovie;
+      const findMovieInCache = await this.redisService.get("movie");
+
+      if(!findMovieInCache){
+
+        const tryToFindMovie = await this.pr.movies.findUnique({
+          where: {
+            realId: movieId,
+          },
+        });
+
+        const setMovieToCache = await this.redisService.set(
+          "user-one",
+          JSON.stringify(tryToFindMovie),
+          "EX",
+          180
+        );
+
+        if(!setMovieToCache){
+          this.logger.error("Error to set all users in the cache!");
+          throw new HttpException("Error to set one user in the cache!",400)
+        };
+  
+        return tryToFindMovie;
+      };
+
+      return JSON.parse(findMovieInCache);
+
     } catch (err) {
       this.logger.error(`${err.message}`);
       throw new HttpException(`${err.message}`, err.status);
