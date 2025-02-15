@@ -4,7 +4,7 @@ import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreationUser } from './DTO/user.dto';
 import { InjectQueue } from '@nestjs/bull';
-import { USER_CACHE_KEY, USER_QUEUE } from 'src/constants/constants';
+import { USER_QUEUE } from 'src/constants/constants';
 import { Queue } from 'bull';
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
@@ -71,14 +71,14 @@ export class UserService {
   public async SelectAll(): Promise<User[]> {
     try {
 
-      const allUsersInCache = await this.redisService.get(USER_CACHE_KEY);
+      const allUsersInCache = await this.redisService.get("user");
 
       if(!allUsersInCache){
 
         const tryToGetAllUsers = await this.prisma.findMany();
 
         const setUserInCache = await this.redisService.set(
-          USER_CACHE_KEY,
+          "user",
           JSON.stringify(tryToGetAllUsers),
           "EX", 
           300
@@ -102,13 +102,33 @@ export class UserService {
 
   public async SelectOne(id: number): Promise<User> {
     try {
-      const tryToFindUser = await this.prisma.findUnique({
-        where: {
-          id: id,
-        },
-      });
 
-      return tryToFindUser;
+      const userInCache = await this.redisService.get("user-one")
+
+      if(!userInCache){
+        const tryToFindUser = await this.prisma.findUnique({
+          where: {
+            id: id,
+          },
+        });
+  
+        const setUserToCahge = await this.redisService.set(
+          "user-one",
+          JSON.stringify(tryToFindUser),
+          "EX",
+          180
+        );
+
+        if(!setUserToCahge){
+          this.logger.error("Error to set all users in the cache!");
+          throw new HttpException("Error to set all users in the cache!s",400)
+        };
+
+        return tryToFindUser;
+      };
+
+      return JSON.parse(userInCache);
+
     } catch (err) {
       this.logger.error(`${err.message}`);
       throw new HttpException(`${err.message}`, err.status);
