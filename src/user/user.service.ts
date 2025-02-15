@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable, Logger, Res } from '@nestjs/common';
 import { Comments, Movies, Prisma, Roles, User } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'prisma/prisma.service';
@@ -6,7 +6,6 @@ import { CreationUser } from './DTO/user.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { USER_QUEUE } from 'src/constants/constants';
 import { Queue } from 'bull';
-import * as bcrypt from 'bcrypt';
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { Axios, AxiosError } from 'axios';
@@ -15,6 +14,8 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { UserCreateCommnetDto } from './DTO/user.createCommnet.dto';
 import { UserCreateDescriptionDto } from './DTO/user.createDescription.dto';
+import { Response } from 'express';
+import { AuthController } from 'src/auth/auth.controller';
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,7 @@ export class UserService {
   constructor(
     private readonly pr: PrismaService,
     @InjectQueue(USER_QUEUE) private readonly userQueue: Queue,
-    private readonly httpService: HttpService,
+    private readonly httpService: HttpService
   ) {
     this.prisma = pr.user;
   }
@@ -279,7 +280,7 @@ export class UserService {
           email: data.email,
         },
       });
-
+      
       if (verifyEmail) {
         this.logger.error(`Email(${data.email} is already in your DB!)`);
         throw new HttpException(
@@ -287,12 +288,11 @@ export class UserService {
           400,
         );
       }
-
       const newUserWithGoogle = this.prisma.create({
         data: {
           name: data.name,
           password: '',
-          email: data.email,
+          email: verifyEmail.email,
           photo: data.photo,
         },
       });

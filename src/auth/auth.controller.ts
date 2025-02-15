@@ -121,7 +121,7 @@ export class AuthController {
 
     @Get(process.env.GOOGLE_CALLBACK_URL_CONTROLLER)
     @UseGuards(GoogleGuard)
-    public async googleCalback(@Res() res: Response, @Req() req): Promise<Response> {
+    public async googleCalback(@Res() res: Response, @Req() req): Promise<Response | void>  {
         const user = req.user; //Dados do oauth
 
         return res.status(202).json({ token: `${user.jwtToken}` });

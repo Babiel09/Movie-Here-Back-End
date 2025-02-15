@@ -1,16 +1,20 @@
 import { InjectQueue } from "@nestjs/bull";
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, Res } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Queue } from "bull";
+import { Response } from "express";
 import { Strategy,VerifyCallback } from "passport-google-oauth20";
+import { PrismaService } from "prisma/prisma.service";
 import { AUTH_QUEUE } from "src/constants/constants";
 import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
     private readonly logger = new Logger(GoogleStrategy.name);
-    constructor(private readonly jwtService:JwtService,private readonly userService:UserService,@InjectQueue(AUTH_QUEUE)private readonly authQueue:Queue){
+    constructor(private readonly jwtService:JwtService,private readonly userService:UserService,
+        @InjectQueue(AUTH_QUEUE)private readonly authQueue:Queue,
+    ){
         super({
             clientID:process.env.GOOGLE_CLIENT_ID,
             clientSecret:process.env.GOOGLE_CLIENT_SECRET,
@@ -20,7 +24,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
     };
 
 
-    public async validate(accessToken?:string, refreshToken?:string, profile?:any, done?:VerifyCallback):Promise<any>{
+    public async validate(accessToken?:string, refreshToken?:string, profile?:any, done?:VerifyCallback,@Res()res?:Response):Promise<any>{
         const {name,emails,photos} = profile;
         
         const userWithGoogle = {
@@ -37,6 +41,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google"){
         this.logger.debug(userWithGoogle);
 
         userWithGoogle.photo = bytes;
+
 
         const newUserWithGoogle = await this.userService.InsertuserWIthGoogle(userWithGoogle)
 
