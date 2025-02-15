@@ -81,7 +81,7 @@ export class UserService {
 
         const setUserInCache = await this.redisService.set(
           USER_CACHE_KEY,
-          JSON.stringify(allUsersInCache),
+          JSON.stringify(tryToGetAllUsers),
           "EX", 
           300
         );
