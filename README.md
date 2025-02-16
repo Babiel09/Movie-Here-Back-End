@@ -21,6 +21,8 @@ This repository contains an API designed to a project of a movie web site, inclu
 <img src="https://skillicons.dev/icons?i=typescript" /><br/>
 ### Prisma
 <img src="https://skillicons.dev/icons?i=prisma" /><br/>
+### Dokcer
+<img src="https://skillicons.dev/icons?i=docker" /><br/>
 ### Postgres
 <img src="https://skillicons.dev/icons?i=postgres" /><br/>
 ### Redis
